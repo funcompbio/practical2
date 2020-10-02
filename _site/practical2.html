@@ -1,0 +1,35 @@
+<h1 id="objectives">Objectives</h1>
+<p>The learning objectives for this practical are:</p>
+<ul>
+<li>Use a text editor to write your Unix scripts.</li>
+<li>Redirect terminal output to a pipe.</li>
+<li>Create your own GitHub profile.</li>
+</ul>
+<h1 id="setup-and-background">Setup and background</h1>
+<p>We will download again some COVID19 data. Please follow the next two steps:</p>
+<ol style="list-style-type: decimal">
+<li>Go to the Catalan Health Departament COVID data portal at <a href="https://dadescovid.cat" class="uri">https://dadescovid.cat</a> and switch the language to &quot;ENGLISH&quot; using the pull-down menu on the top-right corner of the page.</li>
+<li>Follow the downloads link and on the next page click and download the two files corresponding to the &quot;7 DAY AGGREGATION&quot; and the &quot;DAILY DATA&quot; for &quot;COUNTIES&quot; (&quot;COMARQUES&quot; in Catalan). Make sure you know exactly where in your filesystem these two files have been downloaded. <strong>Tip:</strong> some browsers automatically download files into a folder called &quot;Downloads&quot; or under a name corresponding to the translation of &quot;Downloads&quot; to the default language of your operating system.</li>
+<li>Make a directory in your filesystem, for instance at your <em>home</em> directory, called <code>practical2</code> and copy in it the CSV files contained in the previous two ZIP files that you have downloaded, as we analogously did in practical 1.</li>
+</ol>
+<h1 id="use-a-text-editor-to-write-your-unix-scripts.">Use a text editor to write your Unix scripts.</h1>
+<p>If you have not done so yet, please download an install a text editor application in your computer, following the <a href="/setup/">setup</a> instructions. Once the text editor application is installed, run it as follows:</p>
+<ul>
+<li><p>If you have installed a <em>classical</em> text editor, open the editor in a new terminal window. Classical editors are tipically called from the Unix shell and it's handy to given them the name of the file you want to edit right way as you called them as a first argument. If you do that, give them the filename <code>practical2.sh</code>.</p></li>
+<li><p>If you have installed a <em>modern</em> text editor, open it by starting the application from the graphical user interface of your computer.</p></li>
+</ul>
+<p>Once the text editor application is running, write the following two lines on a new fresh empty text file:</p>
+<pre><code>## Script for practical 2
+</code></pre>
+<p>Save these contents into a file called <code>practical2.sh</code> located at the directory <code>practical2</code> that you created before. During the rest of this practical, write all the Unix commands that you type in the terminal also in the text file. Please don't type them twice, first type them in the terminal window and once they work, then using the mouse copy and paste the command-line into the text editor. Each time you copy a new line, save the file again. To keep a better record of what you are doing, add above each shell line a shell comment line, which always starts with one or more hash characters (<code>#</code>), for <strong>example</strong>:</p>
+<pre><code>## list the files
+ls</code></pre>
+<h1 id="redirect-terminal-output-to-a-pipe">Redirect terminal output to a pipe</h1>
+<p>In the previous practical we have seen how to redirect the terminal output to a file. In this section we are going to see a similar concept, where instead of redirecting the terminal output created by a Unix command to a file, we will redirect that terminal output to <em>another Unix command</em> by using what is known as a <a href="https://en.wikipedia.org/wiki/Pipeline_%28Unix%29">Unix pipeline</a>, or Unix pipe for short.</p>
+<p>The concept of Unix pipes was created by <a href="https://en.wikipedia.org/wiki/Douglas_McIlroy">Douglas McIlroy</a>, which is based on his widely adopted summary of the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix philosophy</a>:</p>
+<blockquote>
+<p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p>
+</blockquote>
+<p>The Unix pipe consists of placing the vertical bar (<code>|</code>), available in Spanish keyboards by pressing <code>AltGr+1</code>, between two Unix commands. Try the following:</p>
+<pre><code>$ cat comarques_setmanal.csv | head</code></pre>
+<p>Notice that while the <code>cat</code> command should send the output of the <strong>whole</strong> text file to the terminal window, we only see the first few lines of that output because the pipe has sent that whole output to the <code>head</code> command, which only shows the first few lines of its input.</p>
