@@ -190,7 +190,7 @@ $ grep Si catalunya_setmanal.csv | cut -d ';' -f 15 catalunya_setmanal_geriatric
 ```
 Note that in both cases the output is identical.
 
-## Sort rows
+# Sort rows
 
 Unix provides a command called `sort` to order rows of a file in a number of ways.
 By default, it orders rows in increasing alphabetical order. Note for instance that
@@ -207,7 +207,7 @@ $ cut -d ';' -f 3,15 catalunya_setmanal.csv | sort | tail
 ```
 Looking at the output of each them, can you explain their differences?
 
-## Remove consecutive duplicated lines
+# Remove consecutive duplicated lines
 
 The Unix command `uniq` removes consecutive duplicated lines. Look for instance
 at the beginning and the end of the file `comarques_setmanal.csv`:
@@ -250,7 +250,7 @@ In this case, duplicated lines were occurring in consecutively one after each
 other. However, if this were not the case, what do you think we could do before
 using the `uniq` command to bring duplicated lines together?
 
-## Count consecutive occurrences
+# Count consecutive occurrences
 
 In a previous practical, we have seen the command `wc`, which can be employed to
 count the lines of a text file. Here we want to learn the command `uniq` with
@@ -310,7 +310,7 @@ $ cut -f 15 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -k 2 | head
    2 18
 ```
 
-## Paste columns
+# Paste columns
 
 The Unix command `paste` allows us to paste in parallel lines of given files using
 a `TAB` as delimiter character by default, which can be changed with the option

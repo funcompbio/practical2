@@ -61,14 +61,14 @@ ls</code></pre>
 <p>or had we not generated that file, we could have done it from the original data file using two pipes, as follows:</p>
 <pre><code>$ grep Si catalunya_setmanal.csv | cut -d &#39;;&#39; -f 15 catalunya_setmanal_geriatric.csv | head</code></pre>
 <p>Note that in both cases the output is identical.</p>
-<h2 id="sort-rows">Sort rows</h2>
+<h1 id="sort-rows">Sort rows</h1>
 <p>Unix provides a command called <code>sort</code> to order rows of a file in a number of ways. By default, it orders rows in increasing alphabetical order. Note for instance that in the <code>cataluna_setmanal.csv</code> file, the column <code>DATA_INI</code> and <code>DATA_FI</code> contain the initial and end date of the recorded data for each row, that first lines correspond to more recent data and that date is written in a format that the alphabeic order matches the time order. Type the following four commands:</p>
 <pre><code>$ cut -d &#39;;&#39; -f 3,15 catalunya_setmanal.csv | head
 $ cut -d &#39;;&#39; -f 3,15 catalunya_setmanal.csv | tail
 $ cut -d &#39;;&#39; -f 3,15 catalunya_setmanal.csv | sort | head
 $ cut -d &#39;;&#39; -f 3,15 catalunya_setmanal.csv | sort | tail</code></pre>
 <p>Looking at the output of each them, can you explain their differences?</p>
-<h2 id="remove-consecutive-duplicated-lines">Remove consecutive duplicated lines</h2>
+<h1 id="remove-consecutive-duplicated-lines">Remove consecutive duplicated lines</h1>
 <p>The Unix command <code>uniq</code> removes consecutive duplicated lines. Look for instance at the beginning and the end of the file <code>comarques_setmanal.csv</code>:</p>
 <pre><code>$ head comarques_setmanal.csv
 NOM;CODI;DATA_INI;DATA_FI;RESIDENCIA;IEPG_CONFIRMAT;R0_CONFIRMAT_M;TAXA_CASOS_CONFIRMAT;CASOS_CONFIRMAT;TAXA_PCR;PCR;PERC_PCR_POSITIVES;INGRESSOS_TOTAL;INGRESSOS_CRITIC;EXITUS
@@ -97,7 +97,7 @@ VALLES ORIENTAL;41;2020-02-24;2020-03-01;Si;;;0.0000;0;0.0000;0;0.0000;0;0;0</co
       43</code></pre>
 <p>Can you figure out to what corresponds this number?</p>
 <p>In this case, duplicated lines were occurring in consecutively one after each other. However, if this were not the case, what do you think we could do before using the <code>uniq</code> command to bring duplicated lines together?</p>
-<h2 id="count-consecutive-occurrences">Count consecutive occurrences</h2>
+<h1 id="count-consecutive-occurrences">Count consecutive occurrences</h1>
 <p>In a previous practical, we have seen the command <code>wc</code>, which can be employed to count the lines of a text file. Here we want to learn the command <code>uniq</code> with its option <code>-c</code>, which allows one to count consecutive repeated lines. This is useful to count occurrences of interest in a file. For instance, let's say we want to count the number of different exitus occurrences in the file <code>catalunya_setmanal.csv</code>, i.e., how many lines (weeks) reported 0 exitus, how many reported 1, how many reported 2, etc. We need to extract the exitus column (15), sort it and apply the <code>uniq -c</code> command:</p>
 <pre><code>$ cut -f 15 -d &#39;;&#39; catalunya_setmanal.csv | sort | uniq -c | head</code></pre>
 <p>Let's say we want to see the most frequent occurrences first. We would need then to sort the previous output numerically (option <code>-n</code>) and from largest to smallest (option <code>-r</code>), as follows:</p>
@@ -134,7 +134,7 @@ VALLES ORIENTAL;41;2020-02-24;2020-03-01;Si;;;0.0000;0;0.0000;0;0.0000;0;0;0</co
    3 16
    9 17
    2 18</code></pre>
-<h2 id="paste-columns">Paste columns</h2>
+<h1 id="paste-columns">Paste columns</h1>
 <p>The Unix command <code>paste</code> allows us to paste in parallel lines of given files using a <code>TAB</code> as delimiter character by default, which can be changed with the option '-d'. For instance, see what happens when extract two columns from the CSV file and paste them again:</p>
 <pre><code>$ cut -d &#39;;&#39; -f 3 catalunya_setmanal.csv &gt; catalunya_setmanal_dataini.csv
 $ cut -d &#39;;&#39; -f 15 catalunya_setmanal.csv &gt; catalunya_setmanal_exitus.csv
