@@ -333,7 +333,7 @@ DATA_INI	EXITUS
 2020-09-10	17
 ```
 
-## Exercise
+# Exercise
 
 Compare the number of exitus among general population (i.e., excluding geriatric
 residences) in the month of March 2020 between two of your favorite Catalan counties.
