@@ -371,7 +371,7 @@ character `' '`. Answer: 2020-03-09)
 ### Question 4
 
 Which county had the highest number of exitus in geriatric residences?
-In which 7-day aggregation period did that happen? (Answer: BARCELONES,
+In which 7-day aggregation period did that happen? (answer: BARCELONES,
 575 exitus between 2020-04-06 and 2020-04-12)
 
 ### Question 5
