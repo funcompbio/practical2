@@ -9,7 +9,7 @@ permalink: /practical2/
 The learning objectives for this practical are:
 
  * Use a text editor to write your Unix scripts.
- * Redirect terminal output to a pipe.
+ * Chain Unix commands using pipes.
  * Extract rows and columns.
  * Sorting lines.
  * Counting occurrences.
@@ -23,15 +23,15 @@ We will download again some COVID19 data. Please follow the next two steps:
    and switch the language to "ENGLISH" using the pull-down menu on the top-right corner of the page.
 2. Follow the downloads link and on the next page click and download the two
    files corresponding to the "7 DAY AGGREGATION" for "CATALUNYA" and "COUNTIES"
-   ("COMARQUES" in Catalan). It is important that in the same day to
-   make the data files comparable because the data is updated daily. Make sure you know
+   ("COMARQUES" in Catalan). It is important that you download both files in the
+   same day to make them comparable, because all data is updated daily. Make sure you know
    exactly where in your filesystem these two files have been downloaded.
    **Tip:** some browsers automatically download files into a folder called "Downloads"
    or under a name corresponding to the translation of "Downloads" to the default
    language of your operating system.
 3. Make a directory in your filesystem, for instance at your _home_ directory,
    called `practical2` and copy in it the CSV files contained in the previous two
-   ZIP files that you have downloaded, as we analogously did in practical 1.
+   ZIP files that you have downloaded, as you analogously did in practical 1.
 
 # Use a text editor to write your Unix scripts.
 
@@ -55,7 +55,8 @@ Save these contents into a file called `practical2.sh` located at the directory
 `practical2` that you created before. During the rest of this practical, write
 all the Unix commands that you type in the terminal also in the text file. Please
 don't type them twice, first type them in the terminal window and once they work,
-then using the mouse copy and paste the command-line into the text editor. Each
+then select the command-line using the mouse and finally copy and paste it into
+the text editor. Each
 time you copy a new line, save the file again. To keep a better record of what
 you are doing, add above each shell line a shell comment line, which always starts
 with one or more hash characters (`#`), for **example**:
@@ -65,34 +66,36 @@ with one or more hash characters (`#`), for **example**:
 ls
 ```
 
-# Redirect terminal output to a pipe 
+# Chain Unix commands using pipes
 
 In the previous practical we have seen how to redirect the terminal output
 to a file. In this section we are going to see a similar concept, where instead
 of redirecting the terminal output created by a Unix command to a file, we
-will redirect that terminal output to *another Unix command* by using what is
-known as a [Unix pipeline](https://en.wikipedia.org/wiki/Pipeline_%28Unix%29),
-or Unix pipe for short.
-
-The concept of Unix pipes was created by
+will redirect that terminal output as input into **another Unix command** by
+using what is known as a
+[Unix pipeline](https://en.wikipedia.org/wiki/Pipeline_%28Unix%29), or Unix pipe
+for short. The concept of Unix pipes was created by
 [Douglas McIlroy](https://en.wikipedia.org/wiki/Douglas_McIlroy), which is based on
-his widely adopted summary of the [Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy):
+his widely adopted view of the
+[Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy):
 
 > Write programs that do one thing and do it well. Write programs to work
 > together. Write programs to handle text streams, because that is a universal
 > interface.
 
-The Unix pipe consists of placing the vertical bar (`|`), available in Spanish keyboards
-by pressing `AltGr+1`, between two Unix commands. Try the following:
+To use the Unix pipe we should place the vertical bar (`|`), available in Spanish
+keyboards by pressing `AltGr+1`, between two Unix commands. Try the following:
 
 ```
 $ cat catalunya_setmanal.csv | head
 ```
 
-Notice that while the `cat` command should send the output of the **whole** text file
-to the terminal window, we only see the first few lines of that output because the pipe
-has sent that whole output to the `head` command, which only shows the first few lines
-of its input. This can be graphically represented as follows:
+Notice that while the `cat` command should have sent the output of the **whole**
+text file to the terminal window, we only see the first few lines of that output.
+This has occurred because the pipe has sent that whole output from the `cat` command
+to the input of the `head` command, which only shows the first few lines of that input.
+This can be graphically represented as follows:
+
 <img src="singlepipe.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%; height: auto;">
 
 # Extract rows and columns
@@ -111,16 +114,17 @@ Excel:
 
   1. Spreadsheet software will always attempt to load the whole data into main memory.
   This may become prohibitive when having tens of thousands of rows, which is common for
-  molecular data.
+  high-thoughput molecular measurements data.
   2. Every spreadsheet software uses its own format to store the data, which makes it
   prone to [digital obsolescence](https://en.wikipedia.org/wiki/Digital_obsolescence),
-  the fact that old software or and old version of a software that opens a file is
-  no longer available. CSV files, and text files in general, can never become obsolete
-  because their format does not depend on any specific software to be read or written.
+  the fact that old software required to open a file is no longer available. CSV files,
+  and text files in general, can never become obsolete because their format does not
+  depend on any specific software to be read or written.
 
 Here we will learn to do two common operations on data organized in a matrix layout:
-extract rows and extract columns. To extract rows from a text file in Unix we will
-use the command `grep`, which requires two bits of information:
+extract rows (lines) and extract columns (delimiter-separated values). To extract rows
+from a text file in Unix we will use the command `grep`, which requires two pieces of
+information:
 
 ```
 $ grep pattern filename
@@ -129,7 +133,7 @@ where `pattern` is the text that we expect to match to the lines we want to extr
 while `filename` is the name of the file from which we want to extract the lines matching
 the pattern. Note that `pattern` can be something sophisticated such as a
 [regular expression](https://en.wikipedia.org/wiki/Regular_expression) (not covered in
-this practical) and `filename` can be ommitted when want `grep` to read input from
+this practical) and `filename` can be ommitted when we want `grep` to read input from
 a pipe.
 
 For instance, the column `RESIDENCIA` in the COVID19 data
@@ -150,10 +154,16 @@ Now, repeat the command but this time extracting the rows corresponding to the
 population that **does live** in geriatric-care residences into a separate file
 called `catalunya_setmanal_geriatric.csv`.
 
+**Tip**: note that `grep` has worked well for this particular task because no other
+column in the data has used the terms `Si` and `No` for any other purpose. The
+`grep` command doesn't know about columns, it only finds matches of a pattern in lines,
+reporting the lines that match the pattern. You can also ask `grep` to report the
+lines that **do not** match the pattern by using the option `-v`.
+
 **Warning**: when using the terminal output redirection mechanism (`>`) you should
-**never** use as output filename, a filename that is being used as input in the same
-command line because that would lead to overwriting the input file and end without or
-with corrupted output.
+**never** use as output filename the filename that is being used as input in the same
+command line, because that would lead to overwriting the input file and ending with
+a corrupted output or without output at all.
 
 Extracting columns can be done using the Unix command `cut`, which in the case of
 CSV files also requires specifying the options `-d` and `-f`:
@@ -164,9 +174,9 @@ $ cut -d 'delimiter' -f field filename
 The option `-d` allows us to specify a
 [delimiter character](https://en.wikipedia.org/wiki/Delimiter), which by default
 is the [TAB character](https://en.wikipedia.org/wiki/Tab_key) and should be always
-specified between single quotes (e.g., `,`). The option `-f` allows us to specify
+specified between single quotes (e.g., `','`). The option `-f` allows us to specify
 the columns, also known as
-([fields](https://en.wikipedia.org/wiki/Data_field) in this context. For instance,
+[fields](https://en.wikipedia.org/wiki/Data_field) in this context. For instance,
 let's say we want to extract the last column of the CSV file
 `catalunya_setmanal.csv`, corresponding to the number of exitus at each week.
 Taking into account that this file uses the semicolon (`;`) as field separator,
@@ -193,10 +203,10 @@ Note that in both cases the output is identical.
 # Sort rows
 
 Unix provides a command called `sort` to order rows of a file in a number of ways.
-By default, it orders rows in increasing alphabetical order. Note for instance that
+By default, it sorts rows in increasing alphabetical order. Note for instance that
 in the `cataluna_setmanal.csv` file, the column `DATA_INI` and `DATA_FI` contain the
 initial and end date of the recorded data for each row, that first lines correspond
-to more recent data and that date is written in a format that the alphabeic order
+to more recent data and that date is written in a format that the alphabetic order
 matches the time order. Type the following four commands:
 
 ```
@@ -244,7 +254,7 @@ count the number of resulting lines:
 $ cut -f 1 -d ';' comarques_setmanal.csv | uniq | wc -l
       43
 ```
-Can you figure out to what corresponds this number?
+Do you know to what corresponds this number?
 
 In this case, duplicated lines were occurring in consecutively one after each
 other. However, if this were not the case, what do you think we could do before
@@ -314,7 +324,7 @@ $ cut -f 15 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -k 2 | head
 
 The Unix command `paste` allows us to paste in parallel lines of given files using
 a `TAB` as delimiter character by default, which can be changed with the option
-'-d'. For instance, see what happens when extract two columns from the CSV file
+`-d`. For instance, see what happens when extract two columns from the CSV file
 and paste them again:
 
 ```
@@ -335,7 +345,7 @@ DATA_INI	EXITUS
 
 # Exercise
 
-Compare the number of exitus among general population (i.e., excluding geriatric
+Compare the number of exitus among the general population (i.e., excluding geriatric
 residences) in the month of March 2020 between two of your favorite Catalan counties.
 For instance, this would be the output for `SEGRIA` (left) and `OSONA` (right):
 
