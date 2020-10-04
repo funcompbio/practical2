@@ -178,7 +178,7 @@ specified between single quotes (e.g., `','`). The option `-f` allows us to spec
 the columns, also known as
 [fields](https://en.wikipedia.org/wiki/Data_field) in this context. For instance,
 let's say we want to extract the last column of the CSV file
-`catalunya_setmanal.csv`, corresponding to the number of exitus at each week.
+`catalunya_setmanal.csv`, corresponding to the number of exitus at each 7-day agggregation period.
 Taking into account that this file uses the semicolon (`;`) as field separator,
 we should write:
 
@@ -204,7 +204,7 @@ Note that in both cases the output is identical.
 
 Unix provides a command called `sort` to order rows of a file in a number of ways.
 By default, it sorts rows in increasing alphabetical order. Note for instance that
-in the `cataluna_setmanal.csv` file, the column `DATA_INI` and `DATA_FI` contain the
+in the `catalunya_setmanal.csv` file, the column `DATA_INI` and `DATA_FI` contain the
 initial and end date of the recorded data for each row, that first lines correspond
 to more recent data and that date is written in a format that the alphabetic order
 matches the time order. Type the following four commands:
@@ -225,15 +225,15 @@ at the beginning and the end of the file `comarques_setmanal.csv`:
 ```
 $ head comarques_setmanal.csv
 NOM;CODI;DATA_INI;DATA_FI;RESIDENCIA;IEPG_CONFIRMAT;R0_CONFIRMAT_M;TAXA_CASOS_CONFIRMAT;CASOS_CONFIRMAT;TAXA_PCR;PCR;PERC_PCR_POSITIVES;INGRESSOS_TOTAL;INGRESSOS_CRITIC;EXITUS
-ALT CAMP;01;2020-09-22;2020-09-28;Si;;;0.0000;0;1192.8429;6;0.0000;0;0;0
-ALT CAMP;01;2020-09-22;2020-09-28;No;20.6327;0.282313;9.1355;4;938.6776;411;0.9901;0;0;0
-ALT CAMP;01;2020-09-21;2020-09-27;Si;;;0.0000;0;1192.8429;6;0.0000;0;0;0
-ALT CAMP;01;2020-09-21;2020-09-27;No;27.127;0.329932;18.2710;8;899.8515;394;1.7903;0;0;0
-ALT CAMP;01;2020-09-20;2020-09-26;No;35.8897;0.436508;22.8388;10;897.5676;393;2.3077;0;0;0
-ALT CAMP;01;2020-09-20;2020-09-26;Si;;;0.0000;0;1192.8429;6;0.0000;0;0;0
-ALT CAMP;01;2020-09-19;2020-09-25;Si;;;0.0000;0;1192.8429;6;0.0000;0;0;0
-ALT CAMP;01;2020-09-19;2020-09-25;No;52.4957;0.604875;25.1227;11;922.6904;404;2.4938;0;0;0
-ALT CAMP;01;2020-09-18;2020-09-24;Si;;;0.0000;0;8548.7077;43;0.0000;0;0;0
+ALT CAMP;01;2020-09-24;2020-09-30;No;43.5572;0.733503;18.2715;8;922.7114;404;1.7632;0;0;0
+ALT CAMP;01;2020-09-24;2020-09-30;Si;;;198.4126;1;1190.4761;6;16.6667;0;0;0
+ALT CAMP;01;2020-09-23;2020-09-29;No;35.4974;0.501361;15.9875;7;899.8720;394;1.2887;0;0;0
+ALT CAMP;01;2020-09-23;2020-09-29;Si;;;198.4126;1;1388.8888;7;16.6667;0;0;0
+ALT CAMP;01;2020-09-22;2020-09-28;No;20.6331;0.282313;9.1357;4;943.2669;413;0.9852;0;0;0
+ALT CAMP;01;2020-09-22;2020-09-28;Si;;;0.0000;0;1190.4761;6;0.0000;0;0;0
+ALT CAMP;01;2020-09-21;2020-09-27;No;27.1276;0.329932;18.2715;8;904.4399;396;1.7812;0;0;0
+ALT CAMP;01;2020-09-21;2020-09-27;Si;;;0.0000;0;1190.4761;6;0.0000;0;0;0
+ALT CAMP;01;2020-09-20;2020-09-26;No;35.8905;0.436508;22.8393;10;902.1560;395;2.2959;0;0;0
 $ tail comarques_setmanal.csv 
 VALLES ORIENTAL;41;2020-02-28;2020-03-05;Si;;;0.0000;0;0.0000;0;0.0000;0;0;0
 VALLES ORIENTAL;41;2020-02-28;2020-03-05;No;;;0.0000;0;2.4560;10;0.0000;0;0;0
@@ -267,9 +267,9 @@ count the lines of a text file. Here we want to learn the command `uniq` with
 its option `-c`, which allows one to count consecutive repeated lines. This is
 useful to count occurrences of interest in a file. For instance, let's say we
 want to count the number of different exitus occurrences in the file
-`catalunya_setmanal.csv`, i.e., how many lines (weeks) reported 0 exitus, how
-many reported 1, how many reported 2, etc. We need to extract the exitus column
-(15), sort it and apply the `uniq -c` command:
+`catalunya_setmanal.csv`, i.e., how many lines (7-days aggregation periods)
+reported 0 exitus, how many reported 1, how many reported 2, etc. We need to
+extract the exitus column (15), sort it and apply the `uniq -c` command:
 
 ```
 $ cut -f 15 -d ';' catalunya_setmanal.csv | sort | uniq -c | head
@@ -280,16 +280,16 @@ smallest (option `-r`), as follows:
 
 ```
 $ cut -f 15 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -r | head
- 153 0
-  19 11
+ 165 0
+  18 11
   16 9
   12 25
   12 10
   12 1
   11 8
   10 2
-   9 27
-   9 23
+  10 12
+   9 26
 ```
 So the most frequent reported exitus figure was 0 in 153 lines, the second most
 frequent one was 11 in 19 lines, and so on. We can also tell `sort` to order
@@ -299,7 +299,7 @@ the whole ordered frequency distribution of exitus:
 ```
 $ cut -f 15 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -k 2 | head -20
    1 EXITUS
- 153 0
+ 165 0
   12 1
   10 2
    6 3
@@ -310,14 +310,14 @@ $ cut -f 15 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -k 2 | head
   11 8
   16 9
   12 10
-  19 11
-   9 12
-   7 13
-   6 14
-   2 15
-   3 16
-   9 17
-   2 18
+  18 11
+  10 12
+   6 13
+   5 14
+   4 15
+   5 16
+   6 17
+   5 18
 ```
 
 # Paste columns
@@ -332,15 +332,15 @@ $ cut -d ';' -f 3 catalunya_setmanal.csv > catalunya_setmanal_dataini.csv
 $ cut -d ';' -f 15 catalunya_setmanal.csv > catalunya_setmanal_exitus.csv
 $ paste catalunya_setmanal_dataini.csv catalunya_setmanal_exitus.csv | head
 DATA_INI	EXITUS
-2020-09-12	57
-2020-09-12	0
-2020-09-12	13
-2020-09-11	0
-2020-09-11	14
-2020-09-11	56
-2020-09-10	53
-2020-09-10	0
-2020-09-10	17
+2020-09-24	0
+2020-09-24	31
+2020-09-24	60
+2020-09-23	55
+2020-09-23	0
+2020-09-23	29
+2020-09-22	23
+2020-09-22	48
+2020-09-22	0
 ```
 
 # Exercise
@@ -351,7 +351,7 @@ following questions about the downloaded COVID19 data:
 ### Question 1
 
 For how many 7-day aggregation periods do we have COVID19 data for the
-whole population in Catalunya? (answer: 211)
+whole population in Catalunya? (answer: 215 on October 4th, 2020)
 
 ### Question 2
 
