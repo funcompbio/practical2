@@ -143,9 +143,9 @@ indicates whether the row contains data derived from geriatric-care residences
 data portal to understand why the data is provided separately for these two types
 of population.
 
-Let's say we want to extract the rows for the weekly county COVID19 data derived
-from the population that does not live in geriatric-care residences into a separate
-file called `catalunya_setmanal_general.csv`.
+Let's say we want to extract the rows for the COVID19 data derived
+from the population in Catalunya that does not live in geriatric-care
+residences into a separate file called `catalunya_setmanal_general.csv`.
 
 ```
 $ grep No catalunya_setmanal.csv > catalunya_setmanal_general.csv
@@ -196,7 +196,7 @@ or had we not generated that file, we could have done it from the original data
 file using two pipes, as follows:
 
 ```
-$ grep Si catalunya_setmanal.csv | cut -d ';' -f 15 catalunya_setmanal_geriatric.csv | head
+$ grep Si catalunya_setmanal.csv | cut -d ';' -f 15 | head
 ```
 Note that in both cases the output is identical.
 
