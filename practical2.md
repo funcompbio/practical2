@@ -345,9 +345,41 @@ DATA_INI	EXITUS
 
 # Exercise
 
-Compare the number of exitus among the general population (i.e., excluding geriatric
-residences) in the month of March 2020 between two of your favorite Catalan counties.
-For instance, this would be the output for `SEGRIA` (left) and `OSONA` (right):
+Using the Unix commands we have learned in this practical, try to answer the
+following questions about the downloaded COVID19 data:
+
+### Question 1
+
+For how many 7-day aggregation periods do we have COVID19 data for the
+whole population in Catalunya? (answer: 211)
+
+### Question 2
+
+Which is the highest [basic reproduction number](https://en.wikipedia.org/wiki/Basic_reproduction_number)
+(R0, column `R0_CONFIRMAT`) observed for the general population
+(i.e., excluding those living in geriatric residences) in Catalunya throughout
+the whole 7-day aggregation periods? (answer 5.0) and for the month of June?
+(answer 1.69)
+
+### Question 3
+
+In which 7-day aggregation period was the R0 highest for the general
+population? (**Hint:** you can use the `sort` command with the option
+`-t` to indicate the column delimiter that is not the default blank
+character `' '`. Answer: 2020-03-09)
+
+### Question 4
+
+Which county had the highest number of exitus in geriatric residences?
+In which 7-day aggregation period did that happen? (Answer: BARCELONES,
+575 exitus between 2020-04-06 and 2020-04-12)
+
+### Question 5
+
+Compare the number of exitus among the general population (i.e., excluding
+geriatric residences) in the month of March 2020 between two of your favorite
+Catalan counties. For instance, this would be the output for `SEGRIA` (left)
+and `OSONA` (right):
 
 ```
 11      53
