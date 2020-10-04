@@ -291,8 +291,9 @@ $ cut -f 15 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -r | head
   10 12
    9 26
 ```
-So the most frequent reported exitus figure was 0 in 153 lines, the second most
-frequent one was 11 in 19 lines, and so on. We can also tell `sort` to order
+So the most frequent reported exitus figure was 0 in 165 7-day aggregation
+periods (lines in the CSV file), the second most frequent one was 11 exitus
+in 18 lines, and so on. We can also tell `sort` to order
 that output by the second column using the option `-k`, which would give us
 the whole ordered frequency distribution of exitus:
 
