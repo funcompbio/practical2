@@ -121,6 +121,11 @@ Excel:
   and text files in general, can never become obsolete because their format does not
   depend on any specific software to be read or written.
 
+Additionally, the misuse of Microsoft Excel has caused multiple problems
+with important consequences in loss of monetary and human-time resources,
+such as the
+[loss in 2020 of COVID19 results in England](https://www.theguardian.com/politics/2020/oct/05/how-excel-may-have-caused-loss-of-16000-covid-tests-in-england).
+
 Here we will learn to do two common operations on data organized in a matrix layout:
 extract rows (lines) and extract columns (delimiter-separated values). To extract rows
 from a text file in Unix we will use the command `grep`, which requires two pieces of
