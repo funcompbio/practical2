@@ -69,8 +69,8 @@ ls
 
 **Tip:** when writing shell scripts you will likely introduce syntax errors,
 which sometimes may be difficult to identify. To help you in identifying those
-errors you may use the website https://www.shellcheck.net. To use it you should
-paste into the main text box the following line, known as
+errors you may use the website [https://www.shellcheck.net](https://www.shellcheck.net).
+To use it you should paste into the main text box the following line, known as
 [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29):
 
 ```
@@ -238,7 +238,7 @@ $ cut -d ';' -f 3,17 catalunya_setmanal.csv | sort | tail
 ```
 Looking at the output of each them, can you explain their differences?
 
-_Influence of the locale (regional) configuration of your system_
+## Influence of the locale (regional) configuration of your system
 
 When you use the `sort` command to order numbers, you should use
 the option `-n`. This option is valid for both, integer and
@@ -456,7 +456,7 @@ DATA_INI      EXITUS
 2021-09-17    29
 ```
 
-# Exercise
+# Exercises
 
 Using the Unix commands we have learned in this practical, try to answer the
 following questions about the downloaded COVID19 data:
@@ -510,24 +510,24 @@ and `OSONA` (right):
 13      38
 12      34
 10      36
-9     30
-6     23
-7     16
-4     17
-2     14
-2     12
-2     8
-2     6
-1     6
-0     4
-0     1
-0     1
-0     1
-0     1
-0     0
-0     0
-0     0
-0     0
-0     0
-0     0
+9       30
+6       23
+7       16
+4       17
+2       14
+2       12
+2       8
+2       6
+1       6
+0       4
+0       1
+0       1
+0       1
+0       1
+0       0
+0       0
+0       0
+0       0
+0       0
+0       0
 ```

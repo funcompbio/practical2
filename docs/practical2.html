@@ -27,7 +27,7 @@
 <p>Save these contents into a file called <code>practical2.sh</code> located at the directory <code>practical2</code> that you created before. During the rest of this practical, write all the Unix commands that you type in the terminal also in the text file. Please don’t type them twice, first type them in the terminal window and once they work, then select the command-line using the mouse and finally copy and paste it into the text editor. Each time you copy a new line, save the file again. To keep a better record of what you are doing, add above each shell line a shell comment line, which always starts with one or more hash characters (<code>#</code>), for <strong>example</strong>:</p>
 <pre><code>## list the files
 ls</code></pre>
-<p><strong>Tip:</strong> when writing shell scripts you will likely introduce syntax errors, which sometimes may be difficult to identify. To help you in identifying those errors you may use the website https://www.shellcheck.net. To use it you should paste into the main text box the following line, known as <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a>:</p>
+<p><strong>Tip:</strong> when writing shell scripts you will likely introduce syntax errors, which sometimes may be difficult to identify. To help you in identifying those errors you may use the website <a href="https://www.shellcheck.net">https://www.shellcheck.net</a>. To use it you should paste into the main text box the following line, known as <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a>:</p>
 <pre><code>#!/bin/sh</code></pre>
 <p>and afterwords paste the line, or lines, for which you want to check the syntax of your shell script. The website will parse your script and tell you that either issues were not detected or what syntax errors have been encountered.</p>
 <h1 id="chain-unix-commands-using-pipes">Chain Unix commands using pipes</h1>
@@ -73,7 +73,7 @@ $ cut -d &#39;;&#39; -f 3,17 catalunya_setmanal.csv | tail
 $ cut -d &#39;;&#39; -f 3,17 catalunya_setmanal.csv | sort | head
 $ cut -d &#39;;&#39; -f 3,17 catalunya_setmanal.csv | sort | tail</code></pre>
 <p>Looking at the output of each them, can you explain their differences?</p>
-<p><em>Influence of the locale (regional) configuration of your system</em></p>
+<h2 id="influence-of-the-locale-regional-configuration-of-your-system">Influence of the locale (regional) configuration of your system</h2>
 <p>When you use the <code>sort</code> command to order numbers, you should use the option <code>-n</code>. This option is valid for both, integer and real numbers (i.e., with decimal digits). However, in this latter case, there is a complication derived from the different existing conventions to separate the integer from the decimal part of such a number, e.g., 1.5 vs 1,5.</p>
 <p>Every computer and operating system works with a so-called <a href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale configuration</a> that defines the language used on the computer as well as every other regional aspect influencing how the user reads and writes information on the computer. One of those aspects is the decimal number separator, which in English-speaking countries is the dot (<code>.</code>) and, for instance, in Spain is the comma (<code>,</code>).</p>
 <p>The <code>sort</code> command looks up what is the current <em>locale configuration</em>, and particularly, what is the decimal number separator, to decide how to sort numbers when we specify the <code>-n</code> option. If our configuration is set up to use comma (<code>,</code>) as decimal separator but the data we want to sort uses the dot <code>.</code>, then we need to either replace those dots by commas or change our <em>locale configuration</em> to an English-speaking one.</p>
@@ -196,7 +196,7 @@ DATA_INI      EXITUS
 2021-09-17    0
 2021-09-17    7
 2021-09-17    29</code></pre>
-<h1 id="exercise">Exercise</h1>
+<h1 id="exercises">Exercises</h1>
 <p>Using the Unix commands we have learned in this practical, try to answer the following questions about the downloaded COVID19 data:</p>
 <h3 id="question-1">Question 1</h3>
 <p>For how many 7-day aggregation periods do we have COVID19 data for the general population (i.e., excluding those living in geriatric residences) in Catalunya? (answer: 574 on September 29th, 2021)</p>
@@ -219,23 +219,23 @@ DATA_INI      EXITUS
 13      38
 12      34
 10      36
-9     30
-6     23
-7     16
-4     17
-2     14
-2     12
-2     8
-2     6
-1     6
-0     4
-0     1
-0     1
-0     1
-0     1
-0     0
-0     0
-0     0
-0     0
-0     0
-0     0</code></pre>
+9       30
+6       23
+7       16
+4       17
+2       14
+2       12
+2       8
+2       6
+1       6
+0       4
+0       1
+0       1
+0       1
+0       1
+0       0
+0       0
+0       0
+0       0
+0       0
+0       0</code></pre>
