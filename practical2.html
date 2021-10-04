@@ -93,9 +93,9 @@ Using collate rules of ca_ES locale
 Decimal Point: &lt;,&gt;
 Positive sign: &lt;+&gt;
 Negative sign: &lt;-&gt;</code></pre>
-<p>You will need to press <code>Ctrl+d</code> to exit the <code>sort</code> command since we are not giving any file to sort in the previous call. To change the <em>locale</em> into an English-speaking configuration in an Unix system such as Ubuntu or macOS, you should type the following:</p>
+<p>If you typed the previous instruction, you need to press <code>Ctrl+d</code> to exit the <code>sort</code> command since we are not giving any file to sort in the previous call. If <strong>you need</strong> to change the <em>locale</em> into an English-speaking configuration in an Unix system such as Ubuntu you should type the following:</p>
 <pre><code>$ LC_ALL=en_US</code></pre>
-<p>We can verify that the <em>locale configuration</em> has changed.</p>
+<p>You can verify that the <em>locale configuration</em> has changed.</p>
 <pre><code>$ locale
 LANG=&quot;&quot;
 LC_COLLATE=&quot;en_US&quot;
@@ -111,8 +111,16 @@ Decimal Point: &lt;.&gt;
 Thousands separator: &lt;,&gt;
 Positive sign: &lt;+&gt;
 Negative sign: &lt;-&gt;</code></pre>
-<p>If you are on Windows using the <em>Git Bash</em> Unix shell emulator, then please check the corresponding instructions on the <a href="/setup/">setup</a> page, how to install a Unix shell on Windows.</p>
-<p>Once you have configured your system with an English-speaking <em>locale configuration</em>, then you can safely sort decimal numbers on files with the dot (<code>.</code>) as decimal number separator.</p>
+<p>If you are on Windows using the <em>Git Bash</em> Unix shell emulator or on macOS using the Terminal application, then please check the corresponding instructions on the <a href="/setup/">setup</a> page, in the section about how to install a Unix shell.</p>
+<p>Once you have configured your system with an English-speaking <em>locale configuration</em>, then you can safely sort decimal numbers on files with the dot (<code>.</code>) as decimal number separator. You can check whether it works by trying to reverse order the real numbers 0.11, 2.22 and 5.0, as follows:</p>
+<pre><code>$ echo -e &#39;0.11\n2.22\n5.0&#39; | sort -nr --debug
+Using collate rules of en_US.UTF-8 locale
+Decimal Point: &lt;.&gt;
+Positive sign: &lt;+&gt;
+Negative sign: &lt;-&gt;
+5.0
+2.22
+0.11</code></pre>
 <h1 id="remove-consecutive-duplicated-lines">Remove consecutive duplicated lines</h1>
 <p>The Unix command <code>uniq</code> removes consecutive duplicated lines. Look for instance at the beginning and the end of the file <code>comarques_setmanal.csv</code>:</p>
 <pre><code>$ head comarques_setmanal.csv
