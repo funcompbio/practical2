@@ -290,16 +290,16 @@ Positive sign: <+>
 Negative sign: <->
 ```
 
-You will need to press `Ctrl+d` to exit the `sort` command since we are
-not giving any file to sort in the previous call. To change the
-_locale_ into an English-speaking configuration in an Unix system such
-as Ubuntu or macOS, you should type the following:
+If you typed the previous instruction, you need to press `Ctrl+d` to exit
+the `sort` command since we are not giving any file to sort in the previous
+call. If **you need** to change the _locale_ into an English-speaking
+configuration in an Unix system such as Ubuntu you should type the following:
 
 ```
 $ LC_ALL=en_US
 ```
 
-We can verify that the _locale configuration_ has changed.
+You can verify that the _locale configuration_ has changed.
 
 ```
 $ locale
@@ -319,13 +319,27 @@ Positive sign: <+>
 Negative sign: <->
 ```
 
-If you are on Windows using the _Git Bash_ Unix shell emulator, then please
-check the corresponding instructions on the [setup](/setup/) page, how to
-install a Unix shell on Windows.
+If you are on Windows using the _Git Bash_ Unix shell emulator or on macOS
+using the Terminal application, then please
+check the corresponding instructions on the [setup](/setup/) page, in the
+section about how to install a Unix shell.
 
 Once you have configured your system with an English-speaking
 _locale configuration_, then you can safely sort decimal numbers on
-files with the dot (`.`) as decimal number separator.
+files with the dot (`.`) as decimal number separator. You can
+check whether it works by trying to reverse order the real numbers
+0.11, 2.22 and 5.0, as follows:
+
+```
+$ echo -e '0.11\n2.22\n5.0' | sort -nr --debug
+Using collate rules of en_US.UTF-8 locale
+Decimal Point: <.>
+Positive sign: <+>
+Negative sign: <->
+5.0
+2.22
+0.11
+```
 
 # Remove consecutive duplicated lines
 
