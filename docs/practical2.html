@@ -27,6 +27,8 @@
 <p>Save these contents into a file called <code>practical2.sh</code> located at the directory <code>practical2</code> that you created before. During the rest of this practical, write all the Unix commands that you type in the terminal also in the text file. Please don’t type them twice, first type them in the terminal window and once they work, then select the command-line using the mouse and finally copy and paste it into the text editor. Each time you copy a new line, save the file again. To keep a better record of what you are doing, add above each shell line a shell comment line, which always starts with one or more hash characters (<code>#</code>), for <strong>example</strong>:</p>
 <pre><code>## list the files
 ls</code></pre>
+<p>Once you have some Unix commands in your script file, and you have save it to disk, you may execute that script from the Unix shell as follows (assuming you saved the script as <code>practical2.sh</code>):</p>
+<pre><code>$ sh practical2.sh</code></pre>
 <p><strong>Tip:</strong> when writing shell scripts you will likely introduce syntax errors, which sometimes may be difficult to identify. To help you in identifying those errors you may use the website <a href="https://www.shellcheck.net">https://www.shellcheck.net</a>. To use it you should paste into the main text box the following line, known as <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a>:</p>
 <pre><code>#!/bin/sh</code></pre>
 <p>and afterwords paste the line, or lines, for which you want to check the syntax of your shell script. The website will parse your script and tell you that either issues were not detected or what syntax errors have been encountered.</p>
@@ -205,7 +207,8 @@ DATA_INI      EXITUS
 2021-09-17    7
 2021-09-17    29</code></pre>
 <h1 id="exercises">Exercises</h1>
-<p>Using the Unix commands we have learned in this practical, try to answer the following questions about the downloaded COVID19 data:</p>
+<p>Using the Unix commands we have learned in this practical, try to answer the questions below about the downloaded COVID19 data. Try to edit a shell script for each question under the filename, for instance, <code>question1.sh</code>, <code>question2.sh</code>, etc., and execute it from the shell as, for instance:</p>
+<pre><code>$ sh question1.sh</code></pre>
 <h3 id="question-1">Question 1</h3>
 <p>For how many 7-day aggregation periods do we have COVID19 data for the general population (i.e., excluding those living in geriatric residences) in Catalunya? (answer: 574 on September 29th, 2021)</p>
 <h3 id="question-2">Question 2</h3>

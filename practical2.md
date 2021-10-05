@@ -67,6 +67,14 @@ with one or more hash characters (`#`), for **example**:
 ls
 ```
 
+Once you have some Unix commands in your script file, and you have save it to
+disk, you may execute that script from the Unix shell as follows (assuming you
+saved the script as `practical2.sh`):
+
+```
+$ sh practical2.sh
+```
+
 **Tip:** when writing shell scripts you will likely introduce syntax errors,
 which sometimes may be difficult to identify. To help you in identifying those
 errors you may use the website [https://www.shellcheck.net](https://www.shellcheck.net).
@@ -473,7 +481,13 @@ DATA_INI      EXITUS
 # Exercises
 
 Using the Unix commands we have learned in this practical, try to answer the
-following questions about the downloaded COVID19 data:
+questions below about the downloaded COVID19 data. Try to edit a shell script
+for each question under the filename, for instance, `question1.sh`,
+`question2.sh`, etc., and execute it from the shell as, for instance:
+
+```
+$ sh question1.sh
+```
 
 ### Question 1
 
