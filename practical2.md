@@ -148,7 +148,8 @@ Excel:
 Additionally, the misuse of Microsoft Excel has caused multiple problems
 with important consequences in loss of monetary and human-time resources,
 such as the
-[loss in 2020 of COVID19-test results in England](https://www.theguardian.com/politics/2020/oct/05/how-excel-may-have-caused-loss-of-16000-covid-tests-in-england).
+[loss in 2020 of COVID19-test results in England](https://www.theguardian.com/politics/2020/oct/05/how-excel-may-have-caused-loss-of-16000-covid-tests-in-england)
+or the [misspelling of gene names stored in Excel files as supplementary information to scientific articles](https://doi.org/10.1038/d41586-021-02211-4).
 
 Here we will learn to do two common operations on data organized in a matrix layout:
 extract rows (lines) and extract columns (delimiter-separated values). To extract rows
