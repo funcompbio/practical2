@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Practical 2
-lastupdate: October 5th, 2021
+lastupdate: September 28th, 2022
 permalink: /practical2/
 ---
 
