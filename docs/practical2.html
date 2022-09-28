@@ -61,7 +61,10 @@ ls</code></pre>
 <p><strong>Warning</strong>: when using the terminal output redirection mechanism (<code>&gt;</code>) you should <strong>never</strong> use as output filename the filename that is being used as input in the same command line, because that would lead to overwriting the input file and ending with a corrupted output or without output at all.</p>
 <p>Extracting columns can be done using the Unix command <code>cut</code>, which in the case of CSV files also requires specifying the options <code>-d</code> and <code>-f</code>:</p>
 <pre><code>$ cut -d &#39;delimiter&#39; -f field filename</code></pre>
-<p>The option <code>-d</code> allows us to specify a <a href="https://en.wikipedia.org/wiki/Delimiter">delimiter character</a>, which by default is the <a href="https://en.wikipedia.org/wiki/Tab_key">TAB character</a> and should be always specified between single quotes (e.g., <code>','</code>). The option <code>-f</code> allows us to specify the columns, also known as <a href="https://en.wikipedia.org/wiki/Data_field">fields</a> in this context. For instance, let’s say we want to extract the last column of the CSV file <code>catalunya_setmanal.csv</code>, corresponding to the number of exitus at each 7-day agggregation period. Taking into account that this file uses the semicolon (<code>;</code>) as field separator, we should write:</p>
+<p>The option <code>-d</code> allows us to specify a <a href="https://en.wikipedia.org/wiki/Delimiter">delimiter character</a>, which by default is the <a href="https://en.wikipedia.org/wiki/Tab_key">TAB character</a> and should be always specified between single quotes (e.g., <code>','</code>). The option <code>-f</code> allows us to specify the columns, also known as <a href="https://en.wikipedia.org/wiki/Data_field">fields</a> in this context. For instance, let’s say we want to extract the column of the CSV file <code>catalunya_setmanal.csv</code> corresponding to the number of exitus at each 7-day agggregation period. First, we should identify which position has this column in the first line:</p>
+<pre><code>$ head -n1 catalunya_setmanal
+NOM;CODI;DATA_INI;DATA_FI;RESIDENCIA;IEPG_CONFIRMAT;R0_CONFIRMAT_M;IA14;TAXA_CASOS_CONFIRMAT;CASOS_CONFIRMAT;TAXA_PCRTAR;PCR;TAR;PERC_PCRTAR_POSITIVES;INGRESSOS_TOTAL;INGRESSOS_CRITIC;EXITUS;CASOS_PCR;CASOS_TAR;POSITIVITAT_PCR_NUM;POSITIVITAT_TAR_NUM;POSITIVITAT_PCR_DEN;POSITIVITAT_TAR_DEN;VACUNATS_DOSI_1;VACUNATS_DOSI_2</code></pre>
+<p>where we have used the option <code>-n1</code> to force <code>head</code> to show only the first line of the file. Then, starting from 1, we should figure out that the column called <code>EXITUS</code> is number 17 and taking into account that this file uses the semicolon (<code>;</code>) as field separator, we should write the following command-line to extract that column:</p>
 <pre><code>$ cut -d &#39;;&#39; -f 17 catalunya_setmanal.csv | head</code></pre>
 <p>Now let’s say we want to extract this column from the geriatric subset of the data. We could either run the previous command on the file we created before:</p>
 <pre><code>$ cut -d &#39;;&#39; -f 17 catalunya_setmanal_geriatric.csv | head</code></pre>
@@ -70,11 +73,11 @@ ls</code></pre>
 <p>Note that in both cases the output is identical.</p>
 <h1 id="sort-rows">Sort rows</h1>
 <p>Unix provides a command called <code>sort</code> to order rows of a file in a number of ways. By default, it sorts rows in increasing alphabetical order. Note for instance that in the <code>catalunya_setmanal.csv</code> file, the column <code>DATA_INI</code> and <code>DATA_FI</code> contain the initial and end date of the recorded data for each row, that first lines correspond to more recent data and that date is written in a format that the alphabetic order matches the time order. Type the following four commands:</p>
-<pre><code>$ cut -d &#39;;&#39; -f 3,17 catalunya_setmanal.csv | head
-$ cut -d &#39;;&#39; -f 3,17 catalunya_setmanal.csv | tail
-$ cut -d &#39;;&#39; -f 3,17 catalunya_setmanal.csv | sort | head
-$ cut -d &#39;;&#39; -f 3,17 catalunya_setmanal.csv | sort | tail</code></pre>
-<p>Looking at the output of each them, can you explain their differences?</p>
+<pre><code>$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | head
+$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | tail
+$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | sort | head
+$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | sort | tail</code></pre>
+<p>Looking at the output of each them, can you understand their differences?</p>
 <h2 id="influence-of-the-locale-regional-configuration-of-your-system">Influence of the locale (regional) configuration of your system</h2>
 <p>When you use the <code>sort</code> command to order numbers, you should use the option <code>-n</code>. This option is valid for both, integer and real numbers (i.e., with decimal digits). However, in this latter case, there is a complication derived from the different existing conventions to separate the integer from the decimal part of such a number, e.g., 1.5 vs 1,5.</p>
 <p>Every computer and operating system works with a so-called <a href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale configuration</a> that defines the language used on the computer as well as every other regional aspect influencing how the user reads and writes information on the computer. One of those aspects is the decimal number separator, which in English-speaking countries is the dot (<code>.</code>) and, for instance, in Spain is the comma (<code>,</code>).</p>
@@ -89,26 +92,26 @@ LC_MONETARY=&quot;ca_ES&quot;
 LC_NUMERIC=&quot;ca_ES&quot;
 LC_TIME=&quot;ca_ES&quot;
 LC_ALL=&quot;ca_ES&quot;</code></pre>
-<p>You can also verify how the <code>sort</code> command is picking up that locale configuration on the decimal number separator by using the options <code>-n --debug</code> as follows:</p>
+<p>Particularly important for our purpose here is to check out what is the <em>locale configuration</em> for the variable <code>LC_NUMERIC</code>. You can also verify how the <code>sort</code> command is picking up that locale configuration on the decimal number separator by using the options <code>-n --debug</code> as follows:</p>
 <pre><code>$ sort -n --debug
 Using collate rules of ca_ES locale
 Decimal Point: &lt;,&gt;
 Positive sign: &lt;+&gt;
 Negative sign: &lt;-&gt;</code></pre>
 <p>If you typed the previous instruction, you need to press <code>Ctrl+d</code> to exit the <code>sort</code> command since we are not giving any file to sort in the previous call. If <strong>you need</strong> to change the <em>locale</em> into an English-speaking configuration in an Unix system such as Ubuntu you should type the following:</p>
-<pre><code>$ LC_ALL=en_US</code></pre>
+<pre><code>$ export LC_ALL=en_US.UTF-8</code></pre>
 <p>You can verify that the <em>locale configuration</em> has changed.</p>
 <pre><code>$ locale
-LANG=&quot;&quot;
-LC_COLLATE=&quot;en_US&quot;
-LC_CTYPE=&quot;en_US&quot;
-LC_MESSAGES=&quot;en_US&quot;
-LC_MONETARY=&quot;en_US&quot;
-LC_NUMERIC=&quot;en_US&quot;
-LC_TIME=&quot;en_US&quot;
-LC_ALL=&quot;en_US&quot;
+LANG=&quot;en_US.UTF-8&quot;
+LC_COLLATE=&quot;en_US.UTF-8&quot;
+LC_CTYPE=&quot;en_US.UTF-8&quot;
+LC_MESSAGES=&quot;en_US.UTF-8&quot;
+LC_MONETARY=&quot;en_US.UTF-8&quot;
+LC_NUMERIC=&quot;en_US.UTF-8&quot;
+LC_TIME=&quot;en_US.UTF-8&quot;
+LC_ALL=&quot;en_US.UTF-8&quot;
 $ sort -n --debug
-Using collate rules of en_US locale
+Using collate rules of en_US.UTF-8 locale
 Decimal Point: &lt;.&gt;
 Thousands separator: &lt;,&gt;
 Positive sign: &lt;+&gt;
@@ -159,58 +162,59 @@ VALLES ORIENTAL;41;2020-02-24;2020-03-01;Si;;;0.0000;0.0000;0;0.0000;0;0;0.0000;
 <pre><code>$ cut -f 17 -d &#39;;&#39; catalunya_setmanal.csv | sort | uniq -c | head</code></pre>
 <p>Let’s say we want to see the most frequent occurrences first. We would need then to sort the previous output numerically (option <code>-n</code>) and from largest to smallest (option <code>-r</code>), as follows:</p>
 <pre><code>$ cut -f 17 -d &#39;;&#39; catalunya_setmanal.csv | sort | uniq -c | sort -n -r | head
-    241 0
-    129 1
-     91 2
-     68 3
-     39 4
-     36 5
-     28 12
-     23 6
-     23 10
-     22 9</code></pre>
-<p>So the most frequent reported exitus figure was 0 in 241 7-day aggregation periods (lines in the CSV file), the second most frequent one was 1 exitus in 129 lines, and so on. We can also tell <code>sort</code> to order that output by the second column using the option <code>-k</code>, which would give us the whole ordered frequency distribution of exitus:</p>
+    415 0
+    228 1
+    130 2
+     84 3
+     60 4
+     49 5
+     37 12
+     35 16
+     35 10
+     33 6</code></pre>
+<p>So the most frequent reported exitus figure was 0 in 415 7-day aggregation periods (lines in the CSV file), the second most frequent one was 1 exitus in 228 lines, and so on. We can also tell <code>sort</code> to order that output by the second column using the option <code>-k</code>, which would give us the whole ordered frequency distribution of exitus:</p>
 <pre><code>$ cut -f 17 -d &#39;;&#39; catalunya_setmanal.csv | sort | uniq -c | sort -n -k 2 | head -20
       1 EXITUS
-    241 0
-    129 1
-     91 2
-     68 3
-     39 4
-     36 5
-     23 6
-     21 7
-     13 8
-     22 9
-     23 10
-     18 11
-     28 12
-     15 13
-     17 14
-     17 15
-     13 16
-     17 17
-     16 18</code></pre>
+    415 0
+    228 1
+    130 2
+     84 3
+     60 4
+     49 5
+     33 6
+     23 7
+     20 8
+     26 9
+     35 10
+     30 11
+     37 12
+     29 13
+     32 14
+     33 15
+     35 16
+     31 17
+     32 18</code></pre>
 <h1 id="paste-columns">Paste columns</h1>
 <p>The Unix command <code>paste</code> allows us to paste in parallel lines of given files using a <code>TAB</code> as delimiter character by default, which can be changed with the option <code>-d</code>. For instance, see what happens when extract two columns from the CSV file and paste them again:</p>
 <pre><code>$ cut -d &#39;;&#39; -f 3 catalunya_setmanal.csv &gt; catalunya_setmanal_dataini.csv
 $ cut -d &#39;;&#39; -f 17 catalunya_setmanal.csv &gt; catalunya_setmanal_exitus.csv
 $ paste catalunya_setmanal_dataini.csv catalunya_setmanal_exitus.csv | head
 DATA_INI      EXITUS
-2021-09-19    30
-2021-09-19    0
-2021-09-19    5
-2021-09-18    33
-2021-09-18    0
-2021-09-18    4
-2021-09-17    0
-2021-09-17    7
-2021-09-17    29</code></pre>
+DATA_INI    EXITUS
+2022-07-15  95
+2022-07-15  0
+2022-07-15  35
+2022-07-14  0
+2022-07-14  45
+2022-07-14  114
+2022-07-13  122
+2022-07-13  0
+2022-07-13  42</code></pre>
 <h1 id="exercises">Exercises</h1>
 <p>Using the Unix commands we have learned in this practical, try to answer the questions below about the downloaded COVID19 data. Try to edit a shell script for each question under the filename, for instance, <code>question1.sh</code>, <code>question2.sh</code>, etc., and execute it from the shell as, for instance:</p>
 <pre><code>$ sh question1.sh</code></pre>
 <h3 id="question-1">Question 1</h3>
-<p>For how many 7-day aggregation periods do we have COVID19 data for the general population (i.e., excluding those living in geriatric residences) in Catalunya? (answer: 574 on September 29th, 2021)</p>
+<p>For how many 7-day aggregation periods do we have COVID19 data for the general population (i.e., excluding those living in geriatric residences) in Catalunya? (answer: 873 on September 28th, 2022)</p>
 <h3 id="question-2">Question 2</h3>
 <p>Which is the highest <a href="https://en.wikipedia.org/wiki/Basic_reproduction_number">basic reproduction number</a> (R0, column <code>R0_CONFIRMAT</code>) observed for the general population (i.e., excluding those living in geriatric residences) in Catalunya throughout the whole 7-day aggregation periods? (answer 4.99) and for the months of June 2020 and June 2021? (answer 1.69 and 3.47)</p>
 <h3 id="question-3">Question 3</h3>

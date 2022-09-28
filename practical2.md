@@ -207,10 +207,19 @@ is the [TAB character](https://en.wikipedia.org/wiki/Tab_key) and should be alwa
 specified between single quotes (e.g., `','`). The option `-f` allows us to specify
 the columns, also known as
 [fields](https://en.wikipedia.org/wiki/Data_field) in this context. For instance,
-let's say we want to extract the last column of the CSV file
-`catalunya_setmanal.csv`, corresponding to the number of exitus at each 7-day agggregation period.
-Taking into account that this file uses the semicolon (`;`) as field separator,
-we should write:
+let's say we want to extract the column of the CSV file `catalunya_setmanal.csv`
+corresponding to the number of exitus at each 7-day agggregation period. First,
+we should identify which position has this column in the first line:
+
+```
+$ head -n1 catalunya_setmanal
+NOM;CODI;DATA_INI;DATA_FI;RESIDENCIA;IEPG_CONFIRMAT;R0_CONFIRMAT_M;IA14;TAXA_CASOS_CONFIRMAT;CASOS_CONFIRMAT;TAXA_PCRTAR;PCR;TAR;PERC_PCRTAR_POSITIVES;INGRESSOS_TOTAL;INGRESSOS_CRITIC;EXITUS;CASOS_PCR;CASOS_TAR;POSITIVITAT_PCR_NUM;POSITIVITAT_TAR_NUM;POSITIVITAT_PCR_DEN;POSITIVITAT_TAR_DEN;VACUNATS_DOSI_1;VACUNATS_DOSI_2
+```
+where we have used the option `-n1` to force `head` to show only the first line of
+the file. Then, starting from 1, we should figure out that the column called
+`EXITUS` is number 17 and taking into account that this file uses the semicolon
+(`;`) as field separator, we should write the following command-line to extract
+that column:
 
 ```
 $ cut -d ';' -f 17 catalunya_setmanal.csv | head
@@ -240,12 +249,12 @@ to more recent data and that date is written in a format that the alphabetic ord
 matches the time order. Type the following four commands:
 
 ```
-$ cut -d ';' -f 3,17 catalunya_setmanal.csv | head
-$ cut -d ';' -f 3,17 catalunya_setmanal.csv | tail
-$ cut -d ';' -f 3,17 catalunya_setmanal.csv | sort | head
-$ cut -d ';' -f 3,17 catalunya_setmanal.csv | sort | tail
+$ cut -d ';' -f 3,4,17 catalunya_setmanal.csv | head
+$ cut -d ';' -f 3,4,17 catalunya_setmanal.csv | tail
+$ cut -d ';' -f 3,4,17 catalunya_setmanal.csv | sort | head
+$ cut -d ';' -f 3,4,17 catalunya_setmanal.csv | sort | tail
 ```
-Looking at the output of each them, can you explain their differences?
+Looking at the output of each them, can you understand their differences?
 
 ## Influence of the locale (regional) configuration of your system
 
@@ -287,6 +296,8 @@ LC_TIME="ca_ES"
 LC_ALL="ca_ES"
 ```
 
+Particularly important for our purpose here is to check out what is the
+_locale configuration_ for the variable `LC_NUMERIC`.
 You can also verify how the `sort` command is picking up that locale
 configuration on the decimal number separator by using the options
 `-n --debug` as follows:
@@ -305,23 +316,23 @@ call. If **you need** to change the _locale_ into an English-speaking
 configuration in an Unix system such as Ubuntu you should type the following:
 
 ```
-$ LC_ALL=en_US
+$ export LC_ALL=en_US.UTF-8
 ```
 
 You can verify that the _locale configuration_ has changed.
 
 ```
 $ locale
-LANG=""
-LC_COLLATE="en_US"
-LC_CTYPE="en_US"
-LC_MESSAGES="en_US"
-LC_MONETARY="en_US"
-LC_NUMERIC="en_US"
-LC_TIME="en_US"
-LC_ALL="en_US"
+LANG="en_US.UTF-8"
+LC_COLLATE="en_US.UTF-8"
+LC_CTYPE="en_US.UTF-8"
+LC_MESSAGES="en_US.UTF-8"
+LC_MONETARY="en_US.UTF-8"
+LC_NUMERIC="en_US.UTF-8"
+LC_TIME="en_US.UTF-8"
+LC_ALL="en_US.UTF-8"
 $ sort -n --debug
-Using collate rules of en_US locale
+Using collate rules of en_US.UTF-8 locale
 Decimal Point: <.>
 Thousands separator: <,>
 Positive sign: <+>
@@ -415,45 +426,45 @@ smallest (option `-r`), as follows:
 
 ```
 $ cut -f 17 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -r | head
-    241 0
-    129 1
-     91 2
-     68 3
-     39 4
-     36 5
-     28 12
-     23 6
-     23 10
-     22 9
+    415 0
+    228 1
+    130 2
+     84 3
+     60 4
+     49 5
+     37 12
+     35 16
+     35 10
+     33 6
 ```
-So the most frequent reported exitus figure was 0 in 241 7-day aggregation
+So the most frequent reported exitus figure was 0 in 415 7-day aggregation
 periods (lines in the CSV file), the second most frequent one was 1 exitus
-in 129 lines, and so on. We can also tell `sort` to order that output by the
+in 228 lines, and so on. We can also tell `sort` to order that output by the
 second column using the option `-k`, which would give us the whole ordered
 frequency distribution of exitus:
 
 ```
 $ cut -f 17 -d ';' catalunya_setmanal.csv | sort | uniq -c | sort -n -k 2 | head -20
       1 EXITUS
-    241 0
-    129 1
-     91 2
-     68 3
-     39 4
-     36 5
-     23 6
-     21 7
-     13 8
-     22 9
-     23 10
-     18 11
-     28 12
-     15 13
-     17 14
-     17 15
-     13 16
-     17 17
-     16 18
+    415 0
+    228 1
+    130 2
+     84 3
+     60 4
+     49 5
+     33 6
+     23 7
+     20 8
+     26 9
+     35 10
+     30 11
+     37 12
+     29 13
+     32 14
+     33 15
+     35 16
+     31 17
+     32 18
 ```
 
 # Paste columns
@@ -468,15 +479,16 @@ $ cut -d ';' -f 3 catalunya_setmanal.csv > catalunya_setmanal_dataini.csv
 $ cut -d ';' -f 17 catalunya_setmanal.csv > catalunya_setmanal_exitus.csv
 $ paste catalunya_setmanal_dataini.csv catalunya_setmanal_exitus.csv | head
 DATA_INI      EXITUS
-2021-09-19    30
-2021-09-19    0
-2021-09-19    5
-2021-09-18    33
-2021-09-18    0
-2021-09-18    4
-2021-09-17    0
-2021-09-17    7
-2021-09-17    29
+DATA_INI	EXITUS
+2022-07-15	95
+2022-07-15	0
+2022-07-15	35
+2022-07-14	0
+2022-07-14	45
+2022-07-14	114
+2022-07-13	122
+2022-07-13	0
+2022-07-13	42
 ```
 
 # Exercises
@@ -494,7 +506,7 @@ $ sh question1.sh
 
 For how many 7-day aggregation periods do we have COVID19 data for the
 general population (i.e., excluding those living in geriatric residences)
- in Catalunya? (answer: 574 on September 29th, 2021)
+ in Catalunya? (answer: 873 on September 28th, 2022)
 
 ### Question 2
 
