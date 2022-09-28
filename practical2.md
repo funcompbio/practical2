@@ -478,7 +478,6 @@ and paste them again:
 $ cut -d ';' -f 3 catalunya_setmanal.csv > catalunya_setmanal_dataini.csv
 $ cut -d ';' -f 17 catalunya_setmanal.csv > catalunya_setmanal_exitus.csv
 $ paste catalunya_setmanal_dataini.csv catalunya_setmanal_exitus.csv | head
-DATA_INI      EXITUS
 DATA_INI	EXITUS
 2022-07-15	95
 2022-07-15	0
