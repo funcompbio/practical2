@@ -94,11 +94,14 @@ LC_TIME=&quot;ca_ES&quot;
 LC_ALL=&quot;ca_ES&quot;</code></pre>
 <p>Particularly important for our purpose here is to check out what is the <em>locale configuration</em> for the variable <code>LC_NUMERIC</code>. You can also verify how the <code>sort</code> command is picking up that locale configuration on the decimal number separator by using the options <code>-n --debug</code> as follows:</p>
 <pre><code>$ sort -n --debug
+sort: using ‘ca_ES’ sorting rules</code></pre>
+<p>If you typed the previous instruction, you need to press <code>Ctrl+d</code> to exit the <code>sort</code> command since we are not giving any file to sort in the previous call. If you are in a macOS system, the output is more likely to be this one:</p>
+<pre><code>$ sort -n --debug
 Using collate rules of ca_ES locale
 Decimal Point: &lt;,&gt;
 Positive sign: &lt;+&gt;
 Negative sign: &lt;-&gt;</code></pre>
-<p>If you typed the previous instruction, you need to press <code>Ctrl+d</code> to exit the <code>sort</code> command since we are not giving any file to sort in the previous call. If <strong>you need</strong> to change the <em>locale</em> into an English-speaking configuration in an Unix system such as Ubuntu you should type the following:</p>
+<p>If <strong>you need</strong> to change the <em>locale</em> into an English-speaking configuration in an Unix system such as Ubuntu you should type the following:</p>
 <pre><code>$ export LC_ALL=en_US.UTF-8</code></pre>
 <p>You can verify that the <em>locale configuration</em> has changed.</p>
 <pre><code>$ locale
@@ -155,7 +158,12 @@ VALLES ORIENTAL;41;2020-02-24;2020-03-01;Si;;;0.0000;0.0000;0;0.0000;0;0;0.0000;
 <p>Lines appear to be grouped by county name, which occurs in the first column. Let’s extract the first column, apply the <code>uniq</code> command on its output and count the number of resulting lines:</p>
 <pre><code>$ cut -f 1 -d &#39;;&#39; comarques_setmanal.csv | uniq | wc -l
       43</code></pre>
-<p>Do you know to what corresponds this number?</p>
+<p>If you are in macOS system, it may happen that you don’t get this number and furthermore you get the message:</p>
+<pre><code>illegal byte sequence</code></pre>
+<p>In such a case, and only in such case, you can get around that problem by typing first:</p>
+<pre><code>$ export LC_ALL=C</code></pre>
+<p>and then again the command that counts the unique values in the first column.</p>
+<p>Once you’re getting the right output, do you know to what corresponds that number (43)? Do you think is it correct? If you think is not correct, what could be the reason for that incorrect figure?</p>
 <p>In this case, duplicated lines were occurring in consecutively one after each other. However, if this were not the case, what do you think we could do before using the <code>uniq</code> command to bring duplicated lines together?</p>
 <h1 id="count-consecutive-occurrences">Count consecutive occurrences</h1>
 <p>In a previous practical, we have seen the command <code>wc</code>, which can be employed to count the lines of a text file. Here we want to learn the command <code>uniq</code> with its option <code>-c</code>, which allows one to count consecutively repeated lines. This is useful to count occurrences of interest in a file. For instance, let’s say we want to count the number of different exitus occurrences in the file <code>catalunya_setmanal.csv</code>, i.e., how many lines (7-days aggregation periods) reported 0 exitus, how many reported 1, how many reported 2, etc. We need to extract the exitus column (17), sort it and apply the <code>uniq -c</code> command:</p>
@@ -215,11 +223,11 @@ DATA_INI    EXITUS
 <h3 id="question-1">Question 1</h3>
 <p>For how many 7-day aggregation periods do we have COVID19 data for the general population (i.e., excluding those living in geriatric residences) in Catalunya? (answer: 873 on September 28th, 2022)</p>
 <h3 id="question-2">Question 2</h3>
-<p>Which is the highest <a href="https://en.wikipedia.org/wiki/Basic_reproduction_number">basic reproduction number</a> (R0, column <code>R0_CONFIRMAT</code>) observed for the general population (i.e., excluding those living in geriatric residences) in Catalunya throughout the whole 7-day aggregation periods? (answer 4.99) and for the months of June 2020 and June 2021? (answer 1.69 and 3.47)</p>
+<p>Which is the highest <a href="https://en.wikipedia.org/wiki/Basic_reproduction_number">basic reproduction number</a> (R0, column <code>R0_CONFIRMAT</code>) observed for the general population (i.e., excluding those living in geriatric residences) in Catalunya throughout the whole 7-day aggregation periods? (answer 4.98) and for the months of June 2020 and June 2021? (answer 1.69 and 3.47)</p>
 <h3 id="question-3">Question 3</h3>
-<p>In which 7-day aggregation period was the R0 highest for the general population? (<strong>Hint:</strong> you can use the <code>sort</code> command with the options <code>-k</code> to use a particular column for sorting and <code>-t</code> to indicate the column delimiter character different form the default, which is the blank character <code>' '</code>. Answer: 2020-03-09)</p>
+<p>In which 7-day aggregation period was the R0 highest for the general population? (<strong>Hint:</strong> you can use the <code>sort</code> command with the options <code>-k</code> to use a particular column for sorting and <code>-t</code> to indicate the column delimiter character different form the default, which is the blank character <code>' '</code>. Answer: 2020-03-09;2020-03-15)</p>
 <h3 id="question-4">Question 4</h3>
-<p>Which county had the highest number of exitus in geriatric residences? In which 7-day aggregation period did that happen? (answer: BARCELONES, 573 exitus between 2020-04-06 and 2020-04-12)</p>
+<p>Which county had the highest number of exitus in geriatric residences? In which 7-day aggregation period did that happen? (answer: BARCELONES, 574 exitus between 2020-04-06 and 2020-04-12)</p>
 <h3 id="question-5">Question 5</h3>
 <p>Compare the number of exitus among the general population (i.e., excluding geriatric residences) in the month of March 2020 between two of your favorite Catalan counties. For instance, this would be the output for <code>SEGRIA</code> (left) and <code>OSONA</code> (right):</p>
 <pre><code>11      52
