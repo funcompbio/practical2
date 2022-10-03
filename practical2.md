@@ -304,15 +304,23 @@ configuration on the decimal number separator by using the options
 
 ```
 $ sort -n --debug
+sort: using ‘ca_ES’ sorting rules
+```
+
+If you typed the previous instruction, you need to press `Ctrl+d` to exit
+the `sort` command since we are not giving any file to sort in the previous
+call. If you are in a macOS system, the output is more likely to be this
+one:
+
+```
+$ sort -n --debug
 Using collate rules of ca_ES locale
 Decimal Point: <,>
 Positive sign: <+>
 Negative sign: <->
 ```
 
-If you typed the previous instruction, you need to press `Ctrl+d` to exit
-the `sort` command since we are not giving any file to sort in the previous
-call. If **you need** to change the _locale_ into an English-speaking
+If **you need** to change the _locale_ into an English-speaking
 configuration in an Unix system such as Ubuntu you should type the following:
 
 ```
@@ -400,7 +408,23 @@ count the number of resulting lines:
 $ cut -f 1 -d ';' comarques_setmanal.csv | uniq | wc -l
       43
 ```
-Do you know to what corresponds this number?
+If you are in macOS system, it may happen that you don't get this number and
+furthermore you get the message:
+
+```
+illegal byte sequence
+```
+In such a case, and only in such case, you can get around that problem
+by typing first:
+
+```
+$ export LC_ALL=C
+```
+and then again the command that counts the unique values in the first column.
+
+Once you're getting the right output, do you know to what corresponds that number (43)?
+Do you think is it correct? If you think is not correct, what could be the reason
+for that incorrect figure?
 
 In this case, duplicated lines were occurring in consecutively one after each
 other. However, if this were not the case, what do you think we could do before
@@ -513,7 +537,7 @@ Which is the highest
 [basic reproduction number](https://en.wikipedia.org/wiki/Basic_reproduction_number)
 (R0, column `R0_CONFIRMAT`) observed for the general population
 (i.e., excluding those living in geriatric residences) in Catalunya throughout
-the whole 7-day aggregation periods? (answer 4.99) and for the months of June 2020
+the whole 7-day aggregation periods? (answer 4.98) and for the months of June 2020
 and June 2021?
 (answer 1.69 and 3.47)
 
@@ -523,13 +547,13 @@ In which 7-day aggregation period was the R0 highest for the general
 population? (**Hint:** you can use the `sort` command with the options
 `-k` to use a particular column for sorting and `-t` to indicate the
 column delimiter character different form the default, which is the
-blank character `' '`. Answer: 2020-03-09)
+blank character `' '`. Answer: 2020-03-09;2020-03-15)
 
 ### Question 4
 
 Which county had the highest number of exitus in geriatric residences?
 In which 7-day aggregation period did that happen? (answer: BARCELONES,
-573 exitus between 2020-04-06 and 2020-04-12)
+574 exitus between 2020-04-06 and 2020-04-12)
 
 ### Question 5
 
