@@ -27,17 +27,17 @@ If you are doing this practical in your own computer, please check the
 [setup](/setup/) webpage to make sure that you have access to some flavor of a
 Unix operating system and its CLI.
 
-We will use the data files called `mostres_analitzades.csv` i `virus_detectats`
-that were generated in the [first practical](/practical1/). If you don't have
-these files, please review that practical and generate them again. Once you
-have obtained those two files, copy them into a fresh new directory called
-`practical2`.
+We will use the data files called `mostres_analitzades.csv` i
+`virus_detectats.csv` that were generated in the
+[first practical](/practical1/). If you don't have these files, please review
+that practical and generate them again. Once you have obtained those two files,
+copy them into a fresh new directory called `practical2`.
 
 # Use a text editor to write your Unix scripts.
 
 If you have not done so yet, please download an install a text editor application
-in your computer, following the [setup](/setup/) instructions. Once the text editor
-application is installed, run it as follows:
+in your computer, following the [setup](/setup#text-editor/) instructions. Once
+the text editor application is installed, run it as follows:
 
   * If you have installed a _classical_ text editor, open the editor in a new
     terminal window. Classical editors are tipically called from the Unix shell
@@ -198,13 +198,16 @@ lines that match the pattern. You can also ask `grep` to report the lines that
 
 Try to extract rows from the file `mostres_analitzades.csv` with data
 corresponding to women between 20 and 24 years of age into a new file
-called `mostres_analitzades_dones20a24.csv`. **Tip:** when the pattern consists
-of more than one word, or includes punctuation characters, you should enclose
-the pattern between two quote characters, e.g., `'something like this'`.
+called `mostres_analitzades_dones20a24.csv`. If you are unsure how to dump
+the output into a new file, please check
+[this section](https://funcompbio.github.io/practical1/#redirect-terminal-output-to-a-file)
+from the previous practical. **Tip:** when the pattern consists of more than
+one word, or includes punctuation characters, you should enclose the pattern
+between two quote characters, e.g., `'something like this'`.
 
 **Warning:** when using the terminal output redirection mechanism (`>`) you
-should **never** use as output filename the filename that is being used as
-input in the same command line, because that would lead to overwriting the
+should **never use as output filename, the filename that is being used as
+input in the same command line**, because that would lead to overwriting the
 input file and ending with a corrupted output or without output at all.
 
 Extracting columns can be done using the Unix command `cut`, which in the case
@@ -282,9 +285,7 @@ alter the input file**.
 
 **Exercise:** generate an alphabetically increasing ordered version of the file 
 `mostres_analitzades.csv` and store it under the file name
-`mostres_analitzades_ordenat.csv`. If you are unsure how to do this, please
-check [this section](https://funcompbio.github.io/practical1/#redirect-terminal-output-to-a-file)
-from the previous practical.
+`mostres_analitzades_ordenat.csv`.
 
 # Remove consecutive duplicated lines
 
@@ -500,6 +501,6 @@ around the same weeks of the year, except for the 22nd week in Girona.
 
 Can you understand the following Unix command-line jokes?
 
-<img style="float:left; margin-left:80px;" src="Unix_cat_joke.jpg" height=554/>
+<img style="float:left; margin-left:40px;" src="Unix_cat_joke.jpg" height=250/>
 
-<img style="float:right; margin-right:80px;" src="Unix_upkey_joke.jpg"/>
+<img style="float:right; margin-right:40px;" src="Unix_upkey_joke.jpg" height=250/>
