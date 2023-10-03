@@ -1,24 +1,23 @@
 <h1 id="objectives">Objectives</h1>
 <p>The learning objectives for this practical are:</p>
 <ul>
+<li>Have your computer set up to work with the Unix command-line.</li>
+<li>Download epidemiological data from the Catalan SIVIC network.</li>
 <li>Use a text editor to write your Unix scripts.</li>
 <li>Chain Unix commands using pipes.</li>
 <li>Extract rows and columns.</li>
 <li>Sorting lines.</li>
 <li>Counting occurrences.</li>
 <li>Pasting columns.</li>
+<li>Understand Unix command-line jokes.</li>
 </ul>
 <h1 id="setup-and-background">Setup and background</h1>
-<p>We will download again some COVID19 data. Please follow the next two steps:</p>
-<ol type="1">
-<li>Go to the Catalan Health Departament COVID data portal at <a href="https://dadescovid.cat">https://dadescovid.cat</a> and switch the language to “ENGLISH” using the pull-down menu on the top-right corner of the page.</li>
-<li>Follow the downloads link and on the next page click and download the two files corresponding to the “7 DAY AGGREGATION” for “CATALUNYA” and “COUNTIES” (“COMARQUES” in Catalan) for the “RESIDENCE/GENERAL” population. It is important that you download both files in the same day to make them comparable, because all data is updated daily. Make sure you know exactly where in your filesystem these two files have been downloaded. <strong>Tip:</strong> some browsers automatically download files into a folder called “Downloads” or under a name corresponding to the translation of “Downloads” to the default language of your operating system.</li>
-<li>Make a directory in your filesystem, for instance at your <em>home</em> directory, called <code>practical2</code> and copy in it the CSV files contained in the previous two ZIP files that you have downloaded, as you analogously did in practical 1.</li>
-</ol>
+<p>In this practical we will use some basic commands to explore and manipulate text files in a Unix filesystem. You need to have access to a Unix <a href="https://en.wikipedia.org/wiki/Command-line_interface">command-line interface (CLI)</a>. If you are doing this practical in your own computer, please check the <a href="/setup/">setup</a> webpage to make sure that you have access to some flavor of a Unix operating system and its CLI.</p>
+<p>We will use the data files called <code>mostres_analitzades.csv</code> i <code>virus_detectats</code> that were generated in the <a href="/practical1/">first practical</a>. If you don’t have these files, please review that practical and generate them again. Once you have obtained those two files, copy them into a fresh new directory called <code>practical2</code>.</p>
 <h1 id="use-a-text-editor-to-write-your-unix-scripts.">Use a text editor to write your Unix scripts.</h1>
 <p>If you have not done so yet, please download an install a text editor application in your computer, following the <a href="/setup/">setup</a> instructions. Once the text editor application is installed, run it as follows:</p>
 <ul>
-<li><p>If you have installed a <em>classical</em> text editor, open the editor in a new terminal window. Classical editors are tipically called from the Unix shell and it’s handy to given them the name of the file you want to edit right way as you called them as a first argument. If you do that, give them the filename <code>practical2.sh</code>.</p></li>
+<li><p>If you have installed a <em>classical</em> text editor, open the editor in a new terminal window. Classical editors are tipically called from the Unix shell and it’s handy to give them the name of the file you want to edit right way as you called them as a first argument. If you do that, give them the filename <code>practical2.sh</code>.</p></li>
 <li><p>If you have installed a <em>modern</em> text editor, open it by starting the application from the graphical user interface of your computer.</p></li>
 </ul>
 <p>Once the text editor application is running, write the following two lines on a new fresh empty text file:</p>
@@ -37,9 +36,10 @@ ls</code></pre>
 <blockquote>
 <p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p>
 </blockquote>
-<p>To use the Unix pipe we should place the vertical bar (<code>|</code>), available in Spanish keyboards by pressing <code>AltGr+1</code>, between two Unix commands. Try the following:</p>
-<pre><code>$ cat catalunya_setmanal.csv | head</code></pre>
-<p>Notice that while the <code>cat</code> command should have sent the output of the <strong>whole</strong> text file to the terminal window, we only see the first few lines of that output. This has occurred because the pipe has sent that whole output from the <code>cat</code> command to the input of the <code>head</code> command, which only shows the first few lines of that input. This can be graphically represented as follows:</p>
+<p>To use the Unix pipe we should place the vertical bar character (<code>|</code>) between the call to two commands. <strong>Tip:</strong> In keyboards with a Spanish layout, the bar character <code>|</code> can be written by pressing the keys <code>AltGr+1</code> in windows and Ubuntu, or <code>Alt+1</code> in MacOS.</p>
+<p>Try the following:</p>
+<pre><code>$ cat mostres_analitzades.csv | head</code></pre>
+<p>Notice that while the <code>cat</code> command should have sent the output of the <strong>whole</strong> text file to the terminal window, we only see the first few lines of that output. This has occurred because the pipe has sent that whole <strong>output</strong> from the <code>cat</code> command to the <strong>input</strong> of the <code>head</code> command, which only shows the first few lines of that input. This can be graphically represented as follows:</p>
 <p><img src="singlepipe.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%; height: auto;"></p>
 <h1 id="extract-rows-and-columns">Extract rows and columns</h1>
 <p>Text files such as CSV files have a matrix layout with rows corresponding to lines and columns to values separated by some delimiter character, which is a semicolon (<code>;</code>) in the case of the previous file <code>catalunya_setmanal.csv</code>. Because of its matrix layout, a CSV file can be always opened by any spreadsheet software, such as Microsoft Excel; see image below.</p>
@@ -53,211 +53,157 @@ ls</code></pre>
 <p>Here we will learn to do two common operations on data organized in a matrix layout: extract rows (lines) and extract columns (delimiter-separated values). To extract rows from a text file in Unix we will use the command <code>grep</code>, which requires two pieces of information:</p>
 <pre><code>$ grep pattern filename</code></pre>
 <p>where <code>pattern</code> is the text that we expect to match to the lines we want to extract, while <code>filename</code> is the name of the file from which we want to extract the lines matching the pattern. Note that <code>pattern</code> can be something sophisticated such as a <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expression</a> (not covered in this practical) and <code>filename</code> can be ommitted when we want <code>grep</code> to read input from a pipe.</p>
-<p>For instance, the column <code>RESIDENCIA</code> in the COVID19 data indicates whether the row contains data derived from geriatric-care residences (value <code>Si</code>) or not (value <code>No</code>). You can check the <a href="https://dadescovid.cat/documentacio?lang=eng">documentation</a> at the Catalan COVID19 data portal to understand why the data is provided separately for these two types of population.</p>
-<p>Let’s say we want to extract the rows for the COVID19 data derived from the population in Catalunya that does not live in geriatric-care residences into a separate file called <code>catalunya_setmanal_general.csv</code>.</p>
-<pre><code>$ grep No catalunya_setmanal.csv &gt; catalunya_setmanal_general.csv</code></pre>
-<p>Now, repeat the command but this time extracting the rows corresponding to the population that <strong>does live</strong> in geriatric-care residences into a separate file called <code>catalunya_setmanal_geriatric.csv</code>.</p>
-<p><strong>Tip</strong>: note that <code>grep</code> has worked well for this particular task because no other column in the data has used the terms <code>Si</code> and <code>No</code> for any other purpose. The <code>grep</code> command doesn’t know about columns, it only finds matches of a pattern in lines, reporting the lines that match the pattern. You can also ask <code>grep</code> to report the lines that <strong>do not</strong> match the pattern by using the option <code>-v</code>.</p>
-<p><strong>Warning</strong>: when using the terminal output redirection mechanism (<code>&gt;</code>) you should <strong>never</strong> use as output filename the filename that is being used as input in the same command line, because that would lead to overwriting the input file and ending with a corrupted output or without output at all.</p>
+<p>For instance, the column <code>nom_regio</code> in the file <code>mostres_analitzades.csv</code> stores the name of the Catalan area to which the data in the row corresponds to. Let’s say we want to extract the rows for the data derived from the area of Barcelona into a separate file called <code>mostres_analitzades_bcn.csv</code>.</p>
+<pre><code>$ grep BARCELONA mostres_analitzades.csv &gt; mostres_analitzades_bcn.csv</code></pre>
+<p>Now, repeat the command but this time extracting the rows corresponding to the data derived from the area of Lleida into another file called <code>mostres_analitzades_lleida.csv</code>.</p>
+<p><strong>Note:</strong> note that <code>grep</code> has worked well for this particular task because any other column in the data that was using the terms <code>BARCELONA</code> or <code>LLEIDA</code>, had those terms also in the column <code>nom_regio</code>. The <code>grep</code> command <strong>doesn’t know about columns</strong>, it only finds matches of a pattern in lines, reporting the lines that match the pattern. You can also ask <code>grep</code> to report the lines that <strong>do not</strong> match the pattern by using the option <code>-v</code>.</p>
+<p>Try to extract rows from the file <code>mostres_analitzades.csv</code> with data corresponding to women between 20 and 24 years of age into a new file called <code>mostres_analitzades_dones20a24.csv</code>. <strong>Tip:</strong> when the pattern consists of more than one word, or includes punctuation characters, you should enclose the pattern between two quote characters, e.g., <code>'something like this'</code>.</p>
+<p><strong>Warning:</strong> when using the terminal output redirection mechanism (<code>&gt;</code>) you should <strong>never</strong> use as output filename the filename that is being used as input in the same command line, because that would lead to overwriting the input file and ending with a corrupted output or without output at all.</p>
 <p>Extracting columns can be done using the Unix command <code>cut</code>, which in the case of CSV files also requires specifying the options <code>-d</code> and <code>-f</code>:</p>
 <pre><code>$ cut -d &#39;delimiter&#39; -f field filename</code></pre>
-<p>The option <code>-d</code> allows us to specify a <a href="https://en.wikipedia.org/wiki/Delimiter">delimiter character</a>, which by default is the <a href="https://en.wikipedia.org/wiki/Tab_key">TAB character</a> and should be always specified between single quotes (e.g., <code>','</code>). The option <code>-f</code> allows us to specify the columns, also known as <a href="https://en.wikipedia.org/wiki/Data_field">fields</a> in this context. For instance, let’s say we want to extract the column of the CSV file <code>catalunya_setmanal.csv</code> corresponding to the number of exitus at each 7-day agggregation period. First, we should identify which position has this column in the first line:</p>
-<pre><code>$ head -n1 catalunya_setmanal
-NOM;CODI;DATA_INI;DATA_FI;RESIDENCIA;IEPG_CONFIRMAT;R0_CONFIRMAT_M;IA14;TAXA_CASOS_CONFIRMAT;CASOS_CONFIRMAT;TAXA_PCRTAR;PCR;TAR;PERC_PCRTAR_POSITIVES;INGRESSOS_TOTAL;INGRESSOS_CRITIC;EXITUS;CASOS_PCR;CASOS_TAR;POSITIVITAT_PCR_NUM;POSITIVITAT_TAR_NUM;POSITIVITAT_PCR_DEN;POSITIVITAT_TAR_DEN;VACUNATS_DOSI_1;VACUNATS_DOSI_2</code></pre>
-<p>where we have used the option <code>-n1</code> to force <code>head</code> to show only the first line of the file. Then, starting from 1, we should figure out that the column called <code>EXITUS</code> is number 17 and taking into account that this file uses the semicolon (<code>;</code>) as field separator, we should write the following command-line to extract that column:</p>
-<pre><code>$ cut -d &#39;;&#39; -f 17 catalunya_setmanal.csv | head</code></pre>
-<p>Now let’s say we want to extract this column from the geriatric subset of the data. We could either run the previous command on the file we created before:</p>
-<pre><code>$ cut -d &#39;;&#39; -f 17 catalunya_setmanal_geriatric.csv | head</code></pre>
+<p>The option <code>-d</code> allows us to specify a <a href="https://en.wikipedia.org/wiki/Delimiter">delimiter character</a>, which by default is the <a href="https://en.wikipedia.org/wiki/Tab_key">TAB character</a> and should be always specified between single quotes (e.g., <code>','</code>). The option <code>-f</code> allows us to specify the columns, also known as <a href="https://en.wikipedia.org/wiki/Data_field">fields</a> in this context. For instance, let’s say we want to extract the column of the CSV file <code>mostres_analitzades.csv</code> corresponding to the number of positive cases at each week. First, we should identify which position has this column in the first line:</p>
+<pre><code>$ head -n1 mostres_analitzades.csv
+setmana_epidemiologica,any,data_inici,data_final,codi_regio,nom_regio,codi_ambit,nom_ambit,sexe,grup_edat,index_socioeconomic,total,positiu</code></pre>
+<p>where we have used the option <code>-n1</code> to force <code>head</code> to show only the first line of the file. Then, starting from 1, we should figure out that the column called <code>positiu</code> is number 13 and taking into account that this file uses the comma (<code>,</code>) as field separator, we should write the following command-line to extract that column:</p>
+<pre><code>$ cut -d &#39;,&#39; -f 13 mostres_analitzades.csv | head</code></pre>
+<p>Now let’s say we want to extract this column from the Barcelona subset of the data. We could either run the previous command on the file we created before:</p>
+<pre><code>$ cut -d &#39;,&#39; -f 13 mostres_analitzades_bcn.csv | head</code></pre>
 <p>or had we not generated that file, we could have done it from the original data file using two pipes, as follows:</p>
-<pre><code>$ grep Si catalunya_setmanal.csv | cut -d &#39;;&#39; -f 17 | head</code></pre>
+<pre><code>$ grep BARCELONA mostres_analitzades.csv | cut -d &#39;,&#39; -f 13 | head</code></pre>
 <p>Note that in both cases the output is identical.</p>
 <h1 id="sort-rows">Sort rows</h1>
-<p>Unix provides a command called <code>sort</code> to order rows of a file in a number of ways. By default, it sorts rows in increasing alphabetical order. Note for instance that in the <code>catalunya_setmanal.csv</code> file, the column <code>DATA_INI</code> and <code>DATA_FI</code> contain the initial and end date of the recorded data for each row, that first lines correspond to more recent data and that date is written in a format that the alphabetic order matches the time order. Type the following four commands:</p>
-<pre><code>$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | head
-$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | tail
-$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | sort | head
-$ cut -d &#39;;&#39; -f 3,4,17 catalunya_setmanal.csv | sort | tail</code></pre>
-<p>Looking at the output of each them, can you understand their differences?</p>
-<h2 id="influence-of-the-locale-regional-configuration-of-your-system">Influence of the locale (regional) configuration of your system</h2>
-<p>When you use the <code>sort</code> command to order numbers, you should use the option <code>-n</code>. This option is valid for both, integer and real numbers (i.e., with decimal digits). However, in this latter case, there is a complication derived from the different existing conventions to separate the integer from the decimal part of such a number, e.g., 1.5 vs 1,5.</p>
-<p>Every computer and operating system works with a so-called <a href="https://en.wikipedia.org/wiki/Locale_%28computer_software%29">locale configuration</a> that defines the language used on the computer as well as every other regional aspect influencing how the user reads and writes information on the computer. One of those aspects is the decimal number separator, which in English-speaking countries is the dot (<code>.</code>) and, for instance, in Spain is the comma (<code>,</code>).</p>
-<p>The <code>sort</code> command looks up what is the current <em>locale configuration</em>, and particularly, what is the decimal number separator, to decide how to sort numbers when we specify the <code>-n</code> option. If our configuration is set up to use comma (<code>,</code>) as decimal separator but the data we want to sort uses the dot <code>.</code>, then we need to either replace those dots by commas or change our <em>locale configuration</em> to an English-speaking one.</p>
-<p>To figure out our current <em>locale configuration</em> type the <code>locale</code> command on the Unix shell (the output shown below is one possible example of output, not necessarily the one you obtain in your computer):</p>
-<pre><code>$ locale
-LANG=&quot;&quot;
-LC_COLLATE=&quot;ca_ES&quot;
-LC_CTYPE=&quot;ca_ES&quot;
-LC_MESSAGES=&quot;ca_ES&quot;
-LC_MONETARY=&quot;ca_ES&quot;
-LC_NUMERIC=&quot;ca_ES&quot;
-LC_TIME=&quot;ca_ES&quot;
-LC_ALL=&quot;ca_ES&quot;</code></pre>
-<p>Particularly important for our purpose here is to check out what is the <em>locale configuration</em> for the variable <code>LC_NUMERIC</code>. You can also verify how the <code>sort</code> command is picking up that locale configuration on the decimal number separator by using the options <code>-n --debug</code> as follows:</p>
-<pre><code>$ sort -n --debug
-sort: using ‘ca_ES’ sorting rules</code></pre>
-<p>If you typed the previous instruction, you need to press <code>Ctrl+d</code> to exit the <code>sort</code> command since we are not giving any file to sort in the previous call. If you are in a macOS system, the output is more likely to be this one:</p>
-<pre><code>$ sort -n --debug
-Using collate rules of ca_ES locale
-Decimal Point: &lt;,&gt;
-Positive sign: &lt;+&gt;
-Negative sign: &lt;-&gt;</code></pre>
-<p>If <strong>you need</strong> to change the <em>locale</em> into an English-speaking configuration in an Unix system such as Ubuntu you should type the following:</p>
-<pre><code>$ export LC_ALL=en_US.UTF-8</code></pre>
-<p>You can verify that the <em>locale configuration</em> has changed.</p>
-<pre><code>$ locale
-LANG=&quot;en_US.UTF-8&quot;
-LC_COLLATE=&quot;en_US.UTF-8&quot;
-LC_CTYPE=&quot;en_US.UTF-8&quot;
-LC_MESSAGES=&quot;en_US.UTF-8&quot;
-LC_MONETARY=&quot;en_US.UTF-8&quot;
-LC_NUMERIC=&quot;en_US.UTF-8&quot;
-LC_TIME=&quot;en_US.UTF-8&quot;
-LC_ALL=&quot;en_US.UTF-8&quot;
-$ sort -n --debug
-Using collate rules of en_US.UTF-8 locale
-Decimal Point: &lt;.&gt;
-Thousands separator: &lt;,&gt;
-Positive sign: &lt;+&gt;
-Negative sign: &lt;-&gt;</code></pre>
-<p>If you are on Windows using the <em>Git Bash</em> Unix shell emulator or on macOS using the Terminal application, then please check the corresponding instructions on the <a href="/setup/">setup</a> page, in the section about how to install a Unix shell.</p>
-<p>Once you have configured your system with an English-speaking <em>locale configuration</em>, then you can safely sort decimal numbers on files with the dot (<code>.</code>) as decimal number separator. You can check whether it works by trying to reverse order the real numbers 0.11, 2.22 and 5.0, as follows:</p>
-<pre><code>$ echo -e &#39;0.11\n2.22\n5.0&#39; | sort -nr --debug
-Using collate rules of en_US.UTF-8 locale
-Decimal Point: &lt;.&gt;
-Positive sign: &lt;+&gt;
-Negative sign: &lt;-&gt;
-5.0
-2.22
-0.11</code></pre>
+<p>Unix provides a command called <code>sort</code> to order rows of a file in a number of ways. By default, it sorts rows in increasing alphabetical order. Note for instance that in the <code>mostres_analitzades.csv</code> file, the first column <code>setmana_epidemiologica</code> contains the week of the year in which the values for the corresponding row were obtained. However, if we directly sort the file with the default regime of <code>sort</code>, we will not see at the beginning of the data the first week of the year, nor the last week at the end. Try the following:</p>
+<pre><code>sort mostres_analitzades.csv | head
+sort mostres_analitzades.csv | tail</code></pre>
+<p>Try now using the option <code>-n</code>, which forces <code>sort</code> to output the lines in numerical order instead of the alphabetical one and compare the result with the previous one:</p>
+<pre><code>sort -n mostres_analitzades.csv | head
+sort -n mostres_analitzades.csv | tail</code></pre>
+<p><strong>Note:</strong> an important feature of the <code>sort</code> command, and of most of the Unix commands, is that it leaves the input file <strong>intact</strong>. The <code>sort</code> command merely shows us the <em>ordered version</em> of the input file on the screen. It <strong>does not alter the input file</strong>.</p>
+<p><strong>Exercise:</strong> generate an alphabetically increasing ordered version of the file <code>mostres_analitzades.csv</code> and store it under the file name <code>mostres_analitzades_ordenat.csv</code>. If you are unsure how to do this, please check <a href="https://funcompbio.github.io/practical1/#redirect-terminal-output-to-a-file">this section</a> from the previous practical.</p>
 <h1 id="remove-consecutive-duplicated-lines">Remove consecutive duplicated lines</h1>
-<p>The Unix command <code>uniq</code> removes consecutive duplicated lines. Look for instance at the beginning and the end of the file <code>comarques_setmanal.csv</code>:</p>
-<pre><code>$ head comarques_setmanal.csv
-NOM;CODI;DATA_INI;DATA_FI;RESIDENCIA;IEPG_CONFIRMAT;R0_CONFIRMAT_M;IA14;TAXA_CASOS_CONFIRMAT;CASOS_CONFIRMAT;TAXA_PCRTAR;PCR;TAR;PERC_PCRTAR_POSITIVES;INGRESSOS_TOTAL;INGRESSOS_CRITIC;EXITUS;CASOS_PCR;CASOS_TAR;POSITIVITAT_PCR_NUM;POSITIVITAT_TAR_NUM;POSITIVITAT_PCR_DEN;POSITIVITAT_TAR_DEN;VACUNATS_DOSI_1;VACUNATS_DOSI_2
-ALT CAMP;01;2021-09-19;2021-09-25;No;36.2005;1.14456;31.6191;9.0340;4;1300.9011;292;284;0.7707;0;0;0;2;2;2;2;252;267;175;183
-ALT CAMP;01;2021-09-19;2021-09-25;Si;;;0.0000;0.0000;0;1740.8123;8;1;0.0000;0;0;0;0;0;0;0;3;0;3;2
-ALT CAMP;01;2021-09-18;2021-09-24;No;41.2068;1.21599;33.8776;13.5510;6;1307.6766;302;277;1.3487;0;0;0;2;4;3;4;260;259;172;185
-ALT CAMP;01;2021-09-18;2021-09-24;Si;;;0.0000;0.0000;0;1547.3887;7;1;0.0000;0;0;0;0;0;0;0;2;0;3;2
-ALT CAMP;01;2021-09-17;2021-09-23;No;44.9867;1.24456;36.1361;15.8095;7;1287.3500;302;268;1.7717;0;0;0;3;4;5;4;259;249;206;239
-ALT CAMP;01;2021-09-17;2021-09-23;Si;;;0.0000;0.0000;0;1547.3887;7;1;0.0000;0;0;0;0;0;0;0;4;0;3;1
-ALT CAMP;01;2021-09-16;2021-09-22;No;51.5783;1.26837;40.6531;15.8095;7;1271.5405;312;251;1.8293;0;0;0;3;4;5;4;263;229;171;237
-ALT CAMP;01;2021-09-16;2021-09-22;Si;;;0.0000;0.0000;0;1547.3887;7;1;0.0000;0;0;0;0;0;0;0;4;0;2;1
-ALT CAMP;01;2021-09-15;2021-09-21;No;36.0476;0.839796;42.9116;15.8095;7;1271.5405;332;231;1.8293;1;0;1;3;4;5;4;282;210;205;253
-
-
-$ tail comarques_setmanal.csv 
-VALLES ORIENTAL;41;2020-02-28;2020-03-05;No;;;0.2422;0.2422;1;2.4223;10;0;0.0000;0;0;0;1;0;0;0;10;0;0;0
-VALLES ORIENTAL;41;2020-02-28;2020-03-05;Si;;;0.0000;0.0000;0;0.0000;0;0;0.0000;0;0;0;0;0;0;0;0;0;0;0
-VALLES ORIENTAL;41;2020-02-27;2020-03-04;No;;;0.2422;0.2422;1;1.9379;8;0;0.0000;0;0;0;1;0;0;0;8;0;0;0
-VALLES ORIENTAL;41;2020-02-27;2020-03-04;Si;;;0.0000;0.0000;0;0.0000;0;0;0.0000;0;0;0;0;0;0;0;0;0;0;0
-VALLES ORIENTAL;41;2020-02-26;2020-03-03;No;;;0.2422;0.2422;1;1.6956;7;0;0.0000;0;0;0;1;0;0;0;7;0;0;0
-VALLES ORIENTAL;41;2020-02-26;2020-03-03;Si;;;0.0000;0.0000;0;0.0000;0;0;0.0000;0;0;0;0;0;0;0;0;0;0;0
-VALLES ORIENTAL;41;2020-02-25;2020-03-02;No;;;0.0000;0.0000;0;1.2111;5;0;0.0000;0;0;0;0;0;0;0;5;0;0;0
-VALLES ORIENTAL;41;2020-02-25;2020-03-02;Si;;;0.0000;0.0000;0;0.0000;0;0;0.0000;0;0;0;0;0;0;0;0;0;0;0
-VALLES ORIENTAL;41;2020-02-24;2020-03-01;No;;;0.0000;0.0000;0;0.7267;3;0;0.0000;0;0;0;0;0;0;0;3;0;0;0
-VALLES ORIENTAL;41;2020-02-24;2020-03-01;Si;;;0.0000;0.0000;0;0.0000;0;0;0.0000;0;0;0;0;0;0;0;0;0;0;0</code></pre>
-<p>Lines appear to be grouped by county name, which occurs in the first column. Let’s extract the first column, apply the <code>uniq</code> command on its output and count the number of resulting lines:</p>
-<pre><code>$ cut -f 1 -d &#39;;&#39; comarques_setmanal.csv | uniq | wc -l
-      43</code></pre>
-<p>If you are in macOS system, it may happen that you don’t get this number and furthermore you get the message:</p>
-<pre><code>illegal byte sequence</code></pre>
-<p>In such a case, and only in such case, you can get around that problem by typing first:</p>
-<pre><code>$ export LC_ALL=C</code></pre>
-<p>and then again the command that counts the unique values in the first column.</p>
-<p>Once you’re getting the right output, do you know to what corresponds that number (43)? Do you think is it correct? If you think is not correct, what could be the reason for that incorrect figure?</p>
-<p>In this case, duplicated lines were occurring in consecutively one after each other. However, if this were not the case, what do you think we could do before using the <code>uniq</code> command to bring duplicated lines together?</p>
+<p>The Unix command <code>uniq</code> <strong>removes consecutive duplicated lines</strong>. This command is mostly useful in combination with the previous two commands that can be used to extract a column and sort it alphabetically, because that operation will allow us to output identical values together. Let’s see this working with the following example on the file <code>mostres_analitzades.csv</code>, try to understand what is each command line doing:</p>
+<pre><code>$ cut -d &#39;,&#39; -f 6 mostres_analitzades.csv | head
+nom_regio
+CATALUNYA CENTRAL
+GIRONA
+BARCELONA
+BARCELONA
+BARCELONA
+CAMP DE TARRAGONA
+BARCELONA
+BARCELONA
+BARCELONA
+$ cut -d &#39;,&#39; -f 6 mostres_analitzades.csv | sort | head
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+ALT PIRINEU I ARAN
+$ cut -d &#39;,&#39; -f 6 mostres_analitzades.csv | sort | uniq
+ALT PIRINEU I ARAN
+BARCELONA
+CAMP DE TARRAGONA
+CATALUNYA CENTRAL
+GIRONA
+LLEIDA
+No disponible
+nom_regio
+TERRES DE L&#39;EBRE</code></pre>
 <h1 id="count-consecutive-occurrences">Count consecutive occurrences</h1>
-<p>In a previous practical, we have seen the command <code>wc</code>, which can be employed to count the lines of a text file. Here we want to learn the command <code>uniq</code> with its option <code>-c</code>, which allows one to count consecutively repeated lines. This is useful to count occurrences of interest in a file. For instance, let’s say we want to count the number of different exitus occurrences in the file <code>catalunya_setmanal.csv</code>, i.e., how many lines (7-days aggregation periods) reported 0 exitus, how many reported 1, how many reported 2, etc. We need to extract the exitus column (17), sort it and apply the <code>uniq -c</code> command:</p>
-<pre><code>$ cut -f 17 -d &#39;;&#39; catalunya_setmanal.csv | sort | uniq -c | head</code></pre>
+<p>In the previous practical, we have seen the command <code>wc</code>, which can be employed to count the lines of a text file. Here we will see that the command <code>uniq</code> with its option <code>-c</code>, can be used to count <strong>consecutively repeated</strong> lines. This is useful to count occurrences of interest in a file. For instance, let’s say we want to count the number of different occurrences of positive cases in the file <code>mostres_analitzades.csv</code>, i.e., how many lines (weeks) reported 0 positive cases, how many reported 1, how many reported 2, etc. We need to extract the positive column (13), sort it and apply the <code>uniq -c</code> command (results below from data downloaded on October 3rd, 2023):</p>
+<pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c
+   3908 0
+   8311 1
+   1806 2
+    443 3
+    102 4
+     30 5
+      9 6
+      2 8
+      1 9
+      1 positiu</code></pre>
 <p>Let’s say we want to see the most frequent occurrences first. We would need then to sort the previous output numerically (option <code>-n</code>) and from largest to smallest (option <code>-r</code>), as follows:</p>
-<pre><code>$ cut -f 17 -d &#39;;&#39; catalunya_setmanal.csv | sort | uniq -c | sort -n -r | head
-    415 0
-    228 1
-    130 2
-     84 3
-     60 4
-     49 5
-     37 12
-     35 16
-     35 10
-     33 6</code></pre>
-<p>So the most frequent reported exitus figure was 0 in 415 7-day aggregation periods (lines in the CSV file), the second most frequent one was 1 exitus in 228 lines, and so on. We can also tell <code>sort</code> to order that output by the second column using the option <code>-k</code>, which would give us the whole ordered frequency distribution of exitus:</p>
-<pre><code>$ cut -f 17 -d &#39;;&#39; catalunya_setmanal.csv | sort | uniq -c | sort -n -k 2 | head -20
-      1 EXITUS
-    415 0
-    228 1
-    130 2
-     84 3
-     60 4
-     49 5
-     33 6
-     23 7
-     20 8
-     26 9
-     35 10
-     30 11
-     37 12
-     29 13
-     32 14
-     33 15
-     35 16
-     31 17
-     32 18</code></pre>
+<pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c | sort -n -r
+   8311 1
+   3908 0
+   1806 2
+    443 3
+    102 4
+     30 5
+      9 6
+      2 8
+      1 positiu
+      1 9</code></pre>
+<p>So the most frequent reported positive figure was 1 in 8211 weeks (lines in the CSV file), the second most frequent one was 0 positives in 3827 lines, and so on. We can also tell <code>sort</code> to order that output by the second column using the option <code>-k</code>, which would give us the whole ordered frequency distribution of positives:</p>
+<pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c | sort -n -k 2 
+      1 positiu
+   3908 0
+   8311 1
+   1806 2
+    443 3
+    102 4
+     30 5
+      9 6
+      2 8
+      1 9</code></pre>
 <h1 id="paste-columns">Paste columns</h1>
 <p>The Unix command <code>paste</code> allows us to paste in parallel lines of given files using a <code>TAB</code> as delimiter character by default, which can be changed with the option <code>-d</code>. For instance, see what happens when extract two columns from the CSV file and paste them again:</p>
-<pre><code>$ cut -d &#39;;&#39; -f 3 catalunya_setmanal.csv &gt; catalunya_setmanal_dataini.csv
-$ cut -d &#39;;&#39; -f 17 catalunya_setmanal.csv &gt; catalunya_setmanal_exitus.csv
-$ paste catalunya_setmanal_dataini.csv catalunya_setmanal_exitus.csv | head
-DATA_INI    EXITUS
-2022-07-15  95
-2022-07-15  0
-2022-07-15  35
-2022-07-14  0
-2022-07-14  45
-2022-07-14  114
-2022-07-13  122
-2022-07-13  0
-2022-07-13  42</code></pre>
+<pre><code>$ cut -d &#39;,&#39; -f 1 mostres_analitzades.csv &gt; mostres_analitzades_setmana.csv
+$ cut -d &#39;,&#39; -f 13 mostres_analitzades.csv &gt; mostres_analitzades_positiu.csv
+$ paste mostres_analitzades_setmana.csv mostres_analitzades_positiu.csv | head
+setmana_epidemiologica  positiu
+19  0
+25  1
+19  1
+19  2
+20  1
+20  1
+25  1
+20  1
+20  1</code></pre>
 <h1 id="exercises">Exercises</h1>
-<p>Using the Unix commands we have learned in this practical, try to answer the questions below about the downloaded COVID19 data. Try to edit a shell script for each question under the filename, for instance, <code>question1.sh</code>, <code>question2.sh</code>, etc., and execute it from the shell as, for instance:</p>
+<p>Using the Unix commands we have learned in this practical, try to answer the questions below about the downloaded SIVIC data. Try to edit a shell script for each question under the filename, for instance, <code>question1.sh</code>, <code>question2.sh</code>, etc., and execute it from the shell as, for instance:</p>
 <pre><code>$ sh question1.sh</code></pre>
 <h3 id="question-1">Question 1</h3>
-<p>For how many 7-day aggregation periods do we have COVID19 data for the general population (i.e., excluding those living in geriatric residences) in Catalunya? (answer: 873 on September 28th, 2022)</p>
+<p>One of the previous commands revealed a value called <code>No disponible</code>, which suggests that some of the weeks in the two SIVIC data files, may contain the so-called <a href="https://en.wikipedia.org/wiki/Missing_data">missing values</a>. Calculate how many weeks do we have in each of the two SIVIC data files, <code>mostres_analitzades.csv</code> and <code>virus_detectats.csv</code>, excluding those with missing values. (answer: 14565 for <code>mostres_analitzades.csv</code> and 13731 for <code>virus_detectats.csv</code>, for the data downloaded on October 3rd, 2023)</p>
 <h3 id="question-2">Question 2</h3>
-<p>Which is the highest <a href="https://en.wikipedia.org/wiki/Basic_reproduction_number">basic reproduction number</a> (R0, column <code>R0_CONFIRMAT</code>) observed for the general population (i.e., excluding those living in geriatric residences) in Catalunya throughout the whole 7-day aggregation periods? (answer 4.98) and for the months of June 2020 and June 2021? (answer 1.69 and 3.47)</p>
+<p>Which was the highest number of positives in the file <code>mostres_analitzades.csv</code> in the data from the last week of 2022? (answer: 4 for the data downloaded on October 3rd, 2023)</p>
 <h3 id="question-3">Question 3</h3>
-<p>In which 7-day aggregation period was the R0 highest for the general population? (<strong>Hint:</strong> you can use the <code>sort</code> command with the options <code>-k</code> to use a particular column for sorting and <code>-t</code> to indicate the column delimiter character different form the default, which is the blank character <code>' '</code>. Answer: 2020-03-09;2020-03-15)</p>
+<p>Using the file <code>virus_detectats.csv</code>, figure out how many different viruses are being tested by the SIVIC system. (answer: 10 for the data downloaded on October 3rd, 2023)</p>
 <h3 id="question-4">Question 4</h3>
-<p>Which county had the highest number of exitus in geriatric residences? In which 7-day aggregation period did that happen? (answer: BARCELONES, 574 exitus between 2020-04-06 and 2020-04-12)</p>
+<p>Using the file <code>mostres_analitzades.csv</code>, build a ranking of the data by the number of positives cases, from highest to lowest, found in the area of Lleida in 2022, among men between 40 and 44 years of age, showing only the week number, initial and end date, and number of positives. For the data downloaded on October 3rd, 2023, the top of the ranking should look like this:</p>
+<pre><code>46,14/11/2022,20/11/2022,5
+47,21/11/2022,27/11/2022,2
+40,03/10/2022,09/10/2022,2
+51,19/12/2022,25/12/2022,1
+50,12/12/2022,18/12/2022,1
+48,28/11/2022,04/12/2022,1
+46,14/11/2022,20/11/2022,1
+45,07/11/2022,13/11/2022,1
+45,07/11/2022,13/11/2022,1
+41,10/10/2022,16/10/2022,1</code></pre>
+<!--
+$ grep LLEIDA mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13 -nr | cut -d ',' -f 1,3,4,13 | head
+-->
 <h3 id="question-5">Question 5</h3>
-<p>Compare the number of exitus among the general population (i.e., excluding geriatric residences) in the month of March 2020 between two of your favorite Catalan counties. For instance, this would be the output for <code>SEGRIA</code> (left) and <code>OSONA</code> (right):</p>
-<pre><code>11      52
-10      53
-11      56
-13      52
-14      52
-14      49
-12      50
-13      40
-13      38
-12      34
-10      36
-9       30
-6       23
-7       16
-4       17
-2       14
-2       12
-2       8
-2       6
-1       6
-0       4
-0       1
-0       1
-0       1
-0       1
-0       0
-0       0
-0       0
-0       0
-0       0
-0       0</code></pre>
+<p>Generate the ranking from the previous question replacing the area of Lleida by the area of Girona and compare the top of those two rankings, side by side. For the data downloaded on October 3rd, 2023, that comparison should look as follows, with the data from Lleida on the left and from Girona on the right:</p>
+<pre><code>46,14/11/2022,20/11/2022,5  22,30/05/2022,05/06/2022,3
+47,21/11/2022,27/11/2022,2  50,12/12/2022,18/12/2022,2
+40,03/10/2022,09/10/2022,2  42,17/10/2022,23/10/2022,2
+51,19/12/2022,25/12/2022,1  39,26/09/2022,02/10/2022,2
+50,12/12/2022,18/12/2022,1  52,26/12/2022,01/01/2023,1
+48,28/11/2022,04/12/2022,1  51,19/12/2022,25/12/2022,1
+46,14/11/2022,20/11/2022,1  49,05/12/2022,11/12/2022,1
+45,07/11/2022,13/11/2022,1  46,14/11/2022,20/11/2022,1
+45,07/11/2022,13/11/2022,1  45,07/11/2022,13/11/2022,1
+41,10/10/2022,16/10/2022,1  40,03/10/2022,09/10/2022,1</code></pre>
+<p>We can observe that both areas had the larger occurrence of positives cases around the same weeks of the year, except for the 22nd week in Girona.</p>
+<h3 id="question-6">Question 6</h3>
+<p>Can you understand the following Unix command-line jokes?</p>
+<p><img style="float:left; margin-left:80px;" src="Unix_cat_joke.jpg" height=554/></p>
+<p><img style="float:right; margin-right:80px;" src="Unix_upkey_joke.jpg"/></p>
