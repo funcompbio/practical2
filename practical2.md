@@ -135,8 +135,8 @@ follows:
 
 Text files such as CSV files have a matrix layout with rows corresponding to
 lines and columns to values separated by some delimiter character, which is a
-semicolon (`;`) in the case of the previous file `catalunya_setmanal.csv`.
-Because of its matrix layout, a CSV file can be always opened by any spreadsheet
+comma (`,`) in the case of the previous file `mostres_analitzades.csv`. Because
+of its matrix layout, a CSV file can be always opened by any spreadsheet
 software, such as Microsoft Excel; see image below.
 
 <img src="ExcelCSV.png" style="display: block; margin-left: auto; margin-right: auto; width: 80%; height: auto;">
