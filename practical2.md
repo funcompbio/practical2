@@ -27,7 +27,7 @@ If you are doing this practical in your own computer, please check the
 [setup](/setup/) webpage to make sure that you have access to some flavor of a
 Unix operating system and its CLI.
 
-We will use the data files called `mostres_analitzades.csv` i
+We will use the data files called `mostres_analitzades.csv` and
 `virus_detectats.csv` that were generated in the
 [first practical](/practical1/). If you don't have these files, please review
 that practical and generate them again. Once you have obtained those two files,
