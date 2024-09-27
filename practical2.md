@@ -183,14 +183,14 @@ Let's say we want to extract the rows for the data derived from the area of
 Barcelona into a separate file called `mostres_analitzades_bcn.csv`.
 
 ```
-$ grep BARCELONA mostres_analitzades.csv > mostres_analitzades_bcn.csv
+$ grep Barcelona mostres_analitzades.csv > mostres_analitzades_bcn.csv
 ```
 Now, repeat the command but this time extracting the rows corresponding to the
 data derived from the area of Lleida into another file called
 `mostres_analitzades_lleida.csv`.
 
 **Note:** note that `grep` has worked well for this particular task because any
-other column in the data that was using the terms `BARCELONA` or `LLEIDA`, had
+other column in the data that was using the terms `Barcelona` or `Lleida`, had
 those terms also in the column `nom_regio`. The `grep` command **doesn't know
 about columns**, it only finds matches of a pattern in lines, reporting the
 lines that match the pattern. You can also ask `grep` to report the lines that
@@ -250,7 +250,7 @@ or had we not generated that file, we could have done it from the original data
 file using two pipes, as follows:
 
 ```
-$ grep BARCELONA mostres_analitzades.csv | cut -d ',' -f 13 | head
+$ grep Barcelona mostres_analitzades.csv | cut -d ',' -f 13 | head
 ```
 Note that in both cases the output is identical.
 
@@ -299,36 +299,39 @@ is each command line doing:
 ```
 $ cut -d ',' -f 6 mostres_analitzades.csv | head
 nom_regio
-CATALUNYA CENTRAL
-GIRONA
-BARCELONA
-BARCELONA
-BARCELONA
-CAMP DE TARRAGONA
-BARCELONA
-BARCELONA
-BARCELONA
+Camp de Tarragona
+Camp de Tarragona
+Barcelona Metropolitana Sud
+Penedès
+Girona
+Penedès
+Penedès
+Camp de Tarragona
+Barcelona Metropolitana Sud
 $ cut -d ',' -f 6 mostres_analitzades.csv | sort | head
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
 $ cut -d ',' -f 6 mostres_analitzades.csv | sort | uniq
-ALT PIRINEU I ARAN
-BARCELONA
-CAMP DE TARRAGONA
-CATALUNYA CENTRAL
-GIRONA
-LLEIDA
+Alt Pirineu i Aran
+Barcelona Ciutat
+Barcelona Metropolitana Nord
+Barcelona Metropolitana Sud
+Camp de Tarragona
+Catalunya Central
+Girona
+Lleida
 No disponible
 nom_regio
-TERRES DE L'EBRE
+Penedès
+Terres de l'Ebre
 ```
 
 # Count consecutive occurrences
@@ -341,19 +344,21 @@ want to count the number of different occurrences of positive cases in the file
 `mostres_analitzades.csv`, i.e., how many lines (weeks) reported 0 positive cases,
 how many reported 1, how many reported 2, etc. We need to extract the positive
 column (13), sort it and apply the `uniq -c` command (results below from data
-downloaded on October 3rd, 2023):
+downloaded on September 27th, 2024):
 
 ```
 $ cut -f 13 -d ',' mostres_analitzades.csv | sort | uniq -c
-   3908 0
-   8311 1
-   1806 2
-    443 3
-    102 4
-     30 5
-      9 6
-      2 8
-      1 9
+   6942 0
+  13452 1
+      1 10
+      1 12
+   2658 2
+    626 3
+    147 4
+     41 5
+     12 6
+      8 7
+      5 8
       1 positiu
 ```
 Let's say we want to see the most frequent occurrences first. We would need then
@@ -362,35 +367,40 @@ smallest (option `-r`), as follows:
 
 ```
 $ cut -f 13 -d ',' mostres_analitzades.csv | sort | uniq -c | sort -n -r
-   8311 1
-   3908 0
-   1806 2
-    443 3
-    102 4
-     30 5
-      9 6
-      2 8
+  13452 1
+   6942 0
+   2658 2
+    626 3
+    147 4
+     41 5
+     12 6
+      8 7
+      5 8
       1 positiu
-      1 9
+      1 12
+      1 10
 ```
-So the most frequent reported positive figure was 1 in 8211 weeks (lines in the
-CSV file), the second most frequent one was 0 positives in 3827 lines, and so
+So the most frequent reported positive figure was 1 in 13452 weeks (lines in the
+CSV file), the second most frequent one was 0 positives in 6942 lines, and so
 on. We can also tell `sort` to order that output by the second column using the
-option `-k`, which would give us the whole ordered frequency distribution of
-positives:
+option `-k`, where we should specify the range of columns (separated by a comma
+',') we want to use for ordering), which would give us the whole ordered
+frequency distribution of positives:
 
 ```
-$ cut -f 13 -d ',' mostres_analitzades.csv | sort | uniq -c | sort -n -k 2 
+$ cut -f 13 -d ',' mostres_analitzades.csv | sort | uniq -c | sort -n -k 2,2
       1 positiu
-   3908 0
-   8311 1
-   1806 2
-    443 3
-    102 4
-     30 5
-      9 6
-      2 8
-      1 9
+   6942 0
+  13452 1
+   2658 2
+    626 3
+    147 4
+     41 5
+     12 6
+      8 7
+      5 8
+      1 10
+      1 12
 ```
 
 # Paste columns
@@ -404,15 +414,15 @@ $ cut -d ',' -f 1 mostres_analitzades.csv > mostres_analitzades_setmana.csv
 $ cut -d ',' -f 13 mostres_analitzades.csv > mostres_analitzades_positiu.csv
 $ paste mostres_analitzades_setmana.csv mostres_analitzades_positiu.csv | head
 setmana_epidemiologica	positiu
-19	0
-25	1
-19	1
-19	2
-20	1
-20	1
-25	1
-20	1
-20	1
+12	1
+44	0
+32	1
+27	0
+42	1
+11	1
+22	0
+4	0
+35	1
 ```
 
 # Exercises
@@ -434,20 +444,33 @@ so-called
 [missing values](https://en.wikipedia.org/wiki/Missing_data). Calculate how
 many weeks do we have in each of the two SIVIC data files,
 `mostres_analitzades.csv` and `virus_detectats.csv`, excluding those with
-missing values. (answer: 14565 for `mostres_analitzades.csv` and 13731 for
-`virus_detectats.csv`, for the data downloaded on October 3rd, 2023)
+missing values. (answer: 23793 for `mostres_analitzades.csv` and 21394 for
+`virus_detectats.csv`, for the data downloaded on September 27th, 2024)
+
+<!--
+$ grep -v 'No disponible' mostres_analitzades.csv | wc -l
+$ grep -v 'No disponible' virus_detectats.csv | wc -l
+-->
 
 ### Question 2
 
 Which was the highest number of positives in the file `mostres_analitzades.csv`
-in the data from the last week of 2022? (answer: 4 for the data downloaded
-on October 3rd, 2023)
+in the data from the last week of 2022? (answer: 5 for the data downloaded
+on September 27th, 2024)
+
+<!--
+$ grep '52,2022' mostres_analitzades.csv | cut -d ',' -f 13 | sort -nr | head
+-->
 
 ### Question 3
 
 Using the file `virus_detectats.csv`, figure out how many different viruses
 are being tested by the SIVIC system. (answer: 10 for the data downloaded
-on October 3rd, 2023)
+on September 27th, 2024)
+
+<!--
+$ cut -d ',' -f 9 virus_detectats.csv | sort | uniq | wc -l
+-->
 
 ### Question 4
 
@@ -455,7 +478,7 @@ Using the file `mostres_analitzades.csv`, build a ranking of the data by the
 number of positives cases, from highest to lowest, found in the area of Lleida
 in 2022, among men between 40 and 44 years of age, showing only the week number,
 initial and end date, and number of positives. For the data downloaded on
-October 3rd, 2023, the top of the ranking should look like this:
+September 27th, 2024, the top of the ranking should look like this:
 
 ```
 46,14/11/2022,20/11/2022,5
@@ -471,15 +494,16 @@ October 3rd, 2023, the top of the ranking should look like this:
 ```
 
 <!--
-$ grep LLEIDA mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13 -nr | cut -d ',' -f 1,3,4,13 | head
+$ grep Lleida mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13,13 -nr | cut -d ',' -f 1,3,4,13 | head
 -->
 
 ### Question 5
 
 Generate the ranking from the previous question replacing the area of Lleida by
 the area of Girona and compare the top of those two rankings, side by side. For
-the data downloaded on October 3rd, 2023, that comparison should look as follows,
-with the data from Lleida on the left and from Girona on the right:
+the data downloaded on September 27th, 2024, the top of that comparison should
+look as follows, with the data from Lleida on the left and from Girona on the
+right:
 
 ```
 46,14/11/2022,20/11/2022,5	22,30/05/2022,05/06/2022,3
@@ -493,6 +517,11 @@ with the data from Lleida on the left and from Girona on the right:
 45,07/11/2022,13/11/2022,1	45,07/11/2022,13/11/2022,1
 41,10/10/2022,16/10/2022,1	40,03/10/2022,09/10/2022,1
 ```
+
+<!--
+$ grep Girona mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13,13 -nr | cut -d ',' -f 1,3,4,13 > girona.txt
+$ paste lleida.txt girona.txt | head
+-->
 
 We can observe that both areas had the larger occurrence of positives cases
 around the same weeks of the year, except for the 22nd week in Girona.
