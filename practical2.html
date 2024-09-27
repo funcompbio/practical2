@@ -54,9 +54,9 @@ ls</code></pre>
 <pre><code>$ grep pattern filename</code></pre>
 <p>where <code>pattern</code> is the text that we expect to match to the lines we want to extract, while <code>filename</code> is the name of the file from which we want to extract the lines matching the pattern. Note that <code>pattern</code> can be something sophisticated such as a <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expression</a> (not covered in this practical) and <code>filename</code> can be ommitted when we want <code>grep</code> to read input from a pipe.</p>
 <p>For instance, the column <code>nom_regio</code> in the file <code>mostres_analitzades.csv</code> stores the name of the Catalan area to which the data in the row corresponds to. Let’s say we want to extract the rows for the data derived from the area of Barcelona into a separate file called <code>mostres_analitzades_bcn.csv</code>.</p>
-<pre><code>$ grep BARCELONA mostres_analitzades.csv &gt; mostres_analitzades_bcn.csv</code></pre>
+<pre><code>$ grep Barcelona mostres_analitzades.csv &gt; mostres_analitzades_bcn.csv</code></pre>
 <p>Now, repeat the command but this time extracting the rows corresponding to the data derived from the area of Lleida into another file called <code>mostres_analitzades_lleida.csv</code>.</p>
-<p><strong>Note:</strong> note that <code>grep</code> has worked well for this particular task because any other column in the data that was using the terms <code>BARCELONA</code> or <code>LLEIDA</code>, had those terms also in the column <code>nom_regio</code>. The <code>grep</code> command <strong>doesn’t know about columns</strong>, it only finds matches of a pattern in lines, reporting the lines that match the pattern. You can also ask <code>grep</code> to report the lines that <strong>do not</strong> match the pattern by using the option <code>-v</code>.</p>
+<p><strong>Note:</strong> note that <code>grep</code> has worked well for this particular task because any other column in the data that was using the terms <code>Barcelona</code> or <code>Lleida</code>, had those terms also in the column <code>nom_regio</code>. The <code>grep</code> command <strong>doesn’t know about columns</strong>, it only finds matches of a pattern in lines, reporting the lines that match the pattern. You can also ask <code>grep</code> to report the lines that <strong>do not</strong> match the pattern by using the option <code>-v</code>.</p>
 <p>Try to extract rows from the file <code>mostres_analitzades.csv</code> with data corresponding to women between 20 and 24 years of age into a new file called <code>mostres_analitzades_dones20a24.csv</code>. If you are unsure how to dump the output into a new file, please check <a href="https://funcompbio.github.io/practical1/#redirect-terminal-output-to-a-file">this section</a> from the previous practical. <strong>Tip:</strong> when the pattern consists of more than one word, or includes punctuation characters, you should enclose the pattern between two quote characters, e.g., <code>'something like this'</code>.</p>
 <p><strong>Warning:</strong> when using the terminal output redirection mechanism (<code>&gt;</code>) you should <strong>never use as output filename, the filename that is being used as input in the same command line</strong>, because that would lead to overwriting the input file and ending with a corrupted output or without output at all.</p>
 <p>Extracting columns can be done using the Unix command <code>cut</code>, which in the case of CSV files also requires specifying the options <code>-d</code> and <code>-f</code>:</p>
@@ -69,7 +69,7 @@ setmana_epidemiologica,any,data_inici,data_final,codi_regio,nom_regio,codi_ambit
 <p>Now let’s say we want to extract this column from the Barcelona subset of the data. We could either run the previous command on the file we created before:</p>
 <pre><code>$ cut -d &#39;,&#39; -f 13 mostres_analitzades_bcn.csv | head</code></pre>
 <p>or had we not generated that file, we could have done it from the original data file using two pipes, as follows:</p>
-<pre><code>$ grep BARCELONA mostres_analitzades.csv | cut -d &#39;,&#39; -f 13 | head</code></pre>
+<pre><code>$ grep Barcelona mostres_analitzades.csv | cut -d &#39;,&#39; -f 13 | head</code></pre>
 <p>Note that in both cases the output is identical.</p>
 <h1 id="sort-rows">Sort rows</h1>
 <p>Unix provides a command called <code>sort</code> to order rows of a file in a number of ways. By default, it sorts rows in increasing alphabetical order. Note for instance that in the <code>mostres_analitzades.csv</code> file, the first column <code>setmana_epidemiologica</code> contains the week of the year in which the values for the corresponding row were obtained. However, if we directly sort the file with the default regime of <code>sort</code>, we will not see at the beginning of the data the first week of the year, nor the last week at the end. Try the following:</p>
@@ -84,99 +84,118 @@ sort -n mostres_analitzades.csv | tail</code></pre>
 <p>The Unix command <code>uniq</code> <strong>removes consecutive duplicated lines</strong>. This command is mostly useful in combination with the previous two commands that can be used to extract a column and sort it alphabetically, because that operation will allow us to output identical values together. Let’s see this working with the following example on the file <code>mostres_analitzades.csv</code>, try to understand what is each command line doing:</p>
 <pre><code>$ cut -d &#39;,&#39; -f 6 mostres_analitzades.csv | head
 nom_regio
-CATALUNYA CENTRAL
-GIRONA
-BARCELONA
-BARCELONA
-BARCELONA
-CAMP DE TARRAGONA
-BARCELONA
-BARCELONA
-BARCELONA
+Camp de Tarragona
+Camp de Tarragona
+Barcelona Metropolitana Sud
+Penedès
+Girona
+Penedès
+Penedès
+Camp de Tarragona
+Barcelona Metropolitana Sud
 $ cut -d &#39;,&#39; -f 6 mostres_analitzades.csv | sort | head
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
-ALT PIRINEU I ARAN
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
+Alt Pirineu i Aran
 $ cut -d &#39;,&#39; -f 6 mostres_analitzades.csv | sort | uniq
-ALT PIRINEU I ARAN
-BARCELONA
-CAMP DE TARRAGONA
-CATALUNYA CENTRAL
-GIRONA
-LLEIDA
+Alt Pirineu i Aran
+Barcelona Ciutat
+Barcelona Metropolitana Nord
+Barcelona Metropolitana Sud
+Camp de Tarragona
+Catalunya Central
+Girona
+Lleida
 No disponible
 nom_regio
-TERRES DE L&#39;EBRE</code></pre>
+Penedès
+Terres de l&#39;Ebre</code></pre>
 <h1 id="count-consecutive-occurrences">Count consecutive occurrences</h1>
-<p>In the previous practical, we have seen the command <code>wc</code>, which can be employed to count the lines of a text file. Here we will see that the command <code>uniq</code> with its option <code>-c</code>, can be used to count <strong>consecutively repeated</strong> lines. This is useful to count occurrences of interest in a file. For instance, let’s say we want to count the number of different occurrences of positive cases in the file <code>mostres_analitzades.csv</code>, i.e., how many lines (weeks) reported 0 positive cases, how many reported 1, how many reported 2, etc. We need to extract the positive column (13), sort it and apply the <code>uniq -c</code> command (results below from data downloaded on October 3rd, 2023):</p>
+<p>In the previous practical, we have seen the command <code>wc</code>, which can be employed to count the lines of a text file. Here we will see that the command <code>uniq</code> with its option <code>-c</code>, can be used to count <strong>consecutively repeated</strong> lines. This is useful to count occurrences of interest in a file. For instance, let’s say we want to count the number of different occurrences of positive cases in the file <code>mostres_analitzades.csv</code>, i.e., how many lines (weeks) reported 0 positive cases, how many reported 1, how many reported 2, etc. We need to extract the positive column (13), sort it and apply the <code>uniq -c</code> command (results below from data downloaded on September 27th, 2024):</p>
 <pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c
-   3908 0
-   8311 1
-   1806 2
-    443 3
-    102 4
-     30 5
-      9 6
-      2 8
-      1 9
+   6942 0
+  13452 1
+      1 10
+      1 12
+   2658 2
+    626 3
+    147 4
+     41 5
+     12 6
+      8 7
+      5 8
       1 positiu</code></pre>
 <p>Let’s say we want to see the most frequent occurrences first. We would need then to sort the previous output numerically (option <code>-n</code>) and from largest to smallest (option <code>-r</code>), as follows:</p>
 <pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c | sort -n -r
-   8311 1
-   3908 0
-   1806 2
-    443 3
-    102 4
-     30 5
-      9 6
-      2 8
+  13452 1
+   6942 0
+   2658 2
+    626 3
+    147 4
+     41 5
+     12 6
+      8 7
+      5 8
       1 positiu
-      1 9</code></pre>
-<p>So the most frequent reported positive figure was 1 in 8211 weeks (lines in the CSV file), the second most frequent one was 0 positives in 3827 lines, and so on. We can also tell <code>sort</code> to order that output by the second column using the option <code>-k</code>, which would give us the whole ordered frequency distribution of positives:</p>
-<pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c | sort -n -k 2 
+      1 12
+      1 10</code></pre>
+<p>So the most frequent reported positive figure was 1 in 13452 weeks (lines in the CSV file), the second most frequent one was 0 positives in 6942 lines, and so on. We can also tell <code>sort</code> to order that output by the second column using the option <code>-k</code>, where we should specify the range of columns (separated by a comma ‘,’) we want to use for ordering), which would give us the whole ordered frequency distribution of positives:</p>
+<pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c | sort -n -k 2,2
       1 positiu
-   3908 0
-   8311 1
-   1806 2
-    443 3
-    102 4
-     30 5
-      9 6
-      2 8
-      1 9</code></pre>
+   6942 0
+  13452 1
+   2658 2
+    626 3
+    147 4
+     41 5
+     12 6
+      8 7
+      5 8
+      1 10
+      1 12</code></pre>
 <h1 id="paste-columns">Paste columns</h1>
 <p>The Unix command <code>paste</code> allows us to paste in parallel lines of given files using a <code>TAB</code> as delimiter character by default, which can be changed with the option <code>-d</code>. For instance, see what happens when extract two columns from the CSV file and paste them again:</p>
 <pre><code>$ cut -d &#39;,&#39; -f 1 mostres_analitzades.csv &gt; mostres_analitzades_setmana.csv
 $ cut -d &#39;,&#39; -f 13 mostres_analitzades.csv &gt; mostres_analitzades_positiu.csv
 $ paste mostres_analitzades_setmana.csv mostres_analitzades_positiu.csv | head
 setmana_epidemiologica  positiu
-19  0
-25  1
-19  1
-19  2
-20  1
-20  1
-25  1
-20  1
-20  1</code></pre>
+12  1
+44  0
+32  1
+27  0
+42  1
+11  1
+22  0
+4   0
+35  1</code></pre>
 <h1 id="exercises">Exercises</h1>
 <p>Using the Unix commands we have learned in this practical, try to answer the questions below about the downloaded SIVIC data. Try to edit a shell script for each question under the filename, for instance, <code>question1.sh</code>, <code>question2.sh</code>, etc., and execute it from the shell as, for instance:</p>
 <pre><code>$ sh question1.sh</code></pre>
 <h3 id="question-1">Question 1</h3>
-<p>One of the previous commands revealed a value called <code>No disponible</code>, which suggests that some of the weeks in the two SIVIC data files, may contain the so-called <a href="https://en.wikipedia.org/wiki/Missing_data">missing values</a>. Calculate how many weeks do we have in each of the two SIVIC data files, <code>mostres_analitzades.csv</code> and <code>virus_detectats.csv</code>, excluding those with missing values. (answer: 14565 for <code>mostres_analitzades.csv</code> and 13731 for <code>virus_detectats.csv</code>, for the data downloaded on October 3rd, 2023)</p>
+<p>One of the previous commands revealed a value called <code>No disponible</code>, which suggests that some of the weeks in the two SIVIC data files, may contain the so-called <a href="https://en.wikipedia.org/wiki/Missing_data">missing values</a>. Calculate how many weeks do we have in each of the two SIVIC data files, <code>mostres_analitzades.csv</code> and <code>virus_detectats.csv</code>, excluding those with missing values. (answer: 23793 for <code>mostres_analitzades.csv</code> and 21394 for <code>virus_detectats.csv</code>, for the data downloaded on September 27th, 2024)</p>
+<!--
+$ grep -v 'No disponible' mostres_analitzades.csv | wc -l
+$ grep -v 'No disponible' virus_detectats.csv | wc -l
+-->
 <h3 id="question-2">Question 2</h3>
-<p>Which was the highest number of positives in the file <code>mostres_analitzades.csv</code> in the data from the last week of 2022? (answer: 4 for the data downloaded on October 3rd, 2023)</p>
+<p>Which was the highest number of positives in the file <code>mostres_analitzades.csv</code> in the data from the last week of 2022? (answer: 5 for the data downloaded on September 27th, 2024)</p>
+<!--
+$ grep '52,2022' mostres_analitzades.csv | cut -d ',' -f 13 | sort -nr | head
+-->
 <h3 id="question-3">Question 3</h3>
-<p>Using the file <code>virus_detectats.csv</code>, figure out how many different viruses are being tested by the SIVIC system. (answer: 10 for the data downloaded on October 3rd, 2023)</p>
+<p>Using the file <code>virus_detectats.csv</code>, figure out how many different viruses are being tested by the SIVIC system. (answer: 10 for the data downloaded on September 27th, 2024)</p>
+<!--
+$ cut -d ',' -f 9 virus_detectats.csv | sort | uniq | wc -l
+-->
 <h3 id="question-4">Question 4</h3>
-<p>Using the file <code>mostres_analitzades.csv</code>, build a ranking of the data by the number of positives cases, from highest to lowest, found in the area of Lleida in 2022, among men between 40 and 44 years of age, showing only the week number, initial and end date, and number of positives. For the data downloaded on October 3rd, 2023, the top of the ranking should look like this:</p>
+<p>Using the file <code>mostres_analitzades.csv</code>, build a ranking of the data by the number of positives cases, from highest to lowest, found in the area of Lleida in 2022, among men between 40 and 44 years of age, showing only the week number, initial and end date, and number of positives. For the data downloaded on September 27th, 2024, the top of the ranking should look like this:</p>
 <pre><code>46,14/11/2022,20/11/2022,5
 47,21/11/2022,27/11/2022,2
 40,03/10/2022,09/10/2022,2
@@ -188,10 +207,10 @@ setmana_epidemiologica  positiu
 45,07/11/2022,13/11/2022,1
 41,10/10/2022,16/10/2022,1</code></pre>
 <!--
-$ grep LLEIDA mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13 -nr | cut -d ',' -f 1,3,4,13 | head
+$ grep Lleida mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13,13 -nr | cut -d ',' -f 1,3,4,13 | head
 -->
 <h3 id="question-5">Question 5</h3>
-<p>Generate the ranking from the previous question replacing the area of Lleida by the area of Girona and compare the top of those two rankings, side by side. For the data downloaded on October 3rd, 2023, that comparison should look as follows, with the data from Lleida on the left and from Girona on the right:</p>
+<p>Generate the ranking from the previous question replacing the area of Lleida by the area of Girona and compare the top of those two rankings, side by side. For the data downloaded on September 27th, 2024, the top of that comparison should look as follows, with the data from Lleida on the left and from Girona on the right:</p>
 <pre><code>46,14/11/2022,20/11/2022,5  22,30/05/2022,05/06/2022,3
 47,21/11/2022,27/11/2022,2  50,12/12/2022,18/12/2022,2
 40,03/10/2022,09/10/2022,2  42,17/10/2022,23/10/2022,2
@@ -202,6 +221,10 @@ $ grep LLEIDA mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -
 45,07/11/2022,13/11/2022,1  46,14/11/2022,20/11/2022,1
 45,07/11/2022,13/11/2022,1  45,07/11/2022,13/11/2022,1
 41,10/10/2022,16/10/2022,1  40,03/10/2022,09/10/2022,1</code></pre>
+<!--
+$ grep Girona mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13,13 -nr | cut -d ',' -f 1,3,4,13 > girona.txt
+$ paste lleida.txt girona.txt | head
+-->
 <p>We can observe that both areas had the larger occurrence of positives cases around the same weeks of the year, except for the 22nd week in Girona.</p>
 <h3 id="question-6">Question 6</h3>
 <p>Can you understand the following Unix command-line jokes?</p>
