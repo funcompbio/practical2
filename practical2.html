@@ -12,76 +12,295 @@
 <li>Understand Unix command-line jokes.</li>
 </ul>
 <h1 id="setup-and-background">Setup and background</h1>
-<p>In this practical we will use some basic commands to explore and manipulate text files in a Unix filesystem. You need to have access to a Unix <a href="https://en.wikipedia.org/wiki/Command-line_interface">command-line interface (CLI)</a>. If you are doing this practical in your own computer, please check the <a href="/setup/">setup</a> webpage to make sure that you have access to some flavor of a Unix operating system and its CLI.</p>
-<p>We will use the data files called <code>mostres_analitzades.csv</code> and <code>virus_detectats.csv</code> that were generated in the <a href="/practical1/">first practical</a>. If you don’t have these files, please review that practical and generate them again. Once you have obtained those two files, copy them into a fresh new directory called <code>practical2</code>.</p>
-<h1 id="use-a-text-editor-to-write-your-unix-scripts.">Use a text editor to write your Unix scripts.</h1>
-<p>If you have not done so yet, please download an install a text editor application in your computer, following the <a href="/setup#text-editor/">setup</a> instructions. Once the text editor application is installed, run it as follows:</p>
+<p>In this practical we will use some basic commands to explore and
+manipulate text files in a Unix filesystem. You need to have access to a
+Unix <a
+href="https://en.wikipedia.org/wiki/Command-line_interface">command-line
+interface (CLI)</a>. If you are doing this practical in your own
+computer, please check the <a href="/setup/">setup</a> webpage to make
+sure that you have access to some flavor of a Unix operating system and
+its CLI.</p>
+<!--
+We will use the data files called `mostres_analitzades.csv` and
+`virus_detectats.csv` that were generated in the
+[first practical](/practical1/). If you don't have these files, please review
+that practical and generate them again. Once you have obtained those two files,
+copy them into a fresh new directory called `practical2`.
+-->
+<p>Ideally, we would use the data files called
+<code>mostres_analitzades.csv</code> and
+<code>virus_detectats.csv</code> that were generated in the <a
+href="/practical1/">first practical</a>, or download them again from the
+<a href="https://sivic.salut.gencat.cat/dades_obertes">SIVIC</a> portal.
+However, because those files currently store numerical values between
+quotes as if they were text strings, you should directly download them
+from the following links:</p>
 <ul>
-<li><p>If you have installed a <em>classical</em> text editor, open the editor in a new terminal window. Classical editors are tipically called from the Unix shell and it’s handy to give them the name of the file you want to edit right way as you called them as a first argument. If you do that, give them the filename <code>practical2.sh</code>.</p></li>
-<li><p>If you have installed a <em>modern</em> text editor, open it by starting the application from the graphical user interface of your computer.</p></li>
+<li><a
+href="Vigilància_microbiològica_sentinella_a_Atenció_Primària__mostres_analitzades_20240927.csv">Vigilància_microbiològica_sentinella_a_Atenció_Primària__mostres_analitzades_20240927.csv</a></li>
+<li><a
+href="Vigilància_microbiològica_sentinella_a_Atenció_Primària__virus_detectats_20240927.csv">Vigilància_microbiològica_sentinella_a_Atenció_Primària__virus_detectats_20240927.csv</a></li>
 </ul>
-<p>Once the text editor application is running, write the following two lines on a new fresh empty text file:</p>
+<p>The version of these files available at those links were downloaded
+from the Catalan SIVIC system on September 27th, 2024. Once you have
+downloaded those two files, copy them into a fresh new directory called
+<code>practical2</code>, and rename them to
+<code>mostres_analitzades.csv</code> and
+<code>virus_detectats.csv</code>, respectively.</p>
+<h1 id="use-a-text-editor-to-write-your-unix-scripts.">Use a text editor
+to write your Unix scripts.</h1>
+<!--
+If you have not done so yet, please download an install a text editor application
+in your computer, following the [setup](/setup#text-editor/) instructions. Once
+the text editor application is installed, run it as follows:
+
+  * If you have installed a _classical_ text editor, open the editor in a new
+    terminal window. Classical editors are tipically called from the Unix shell
+    and it's handy to give them the name of the file you want to edit right way
+    as you called them as a first argument. If you do that, give them the
+    filename `practical2.sh`.
+
+  * If you have installed a _modern_ text editor, open it by starting the
+    application from the graphical user interface of your computer.
+-->
+<p>Unix commands can be combined into scripts, which are text files
+containing a sequence of commands that can be executed one after the
+other. To create such scripts, you need to use a text editor
+application. There are different types of text editors, some of them
+listed at the <a href="/setup#text-editor/">setup</a> webpage. Here we
+recommend you using the <a href="https://code.visualstudio.com">Visual
+Studio Code</a> text editor. Once this editor is available in you
+computer, you have created the directory <code>practical2</code>, and
+you have changed your CWD to <code>practical2</code>, run the text
+editor as follows:</p>
+<pre><code>$ code practical2/practical2.sh</code></pre>
+<p>This command will open the Visual Studio Code application and create
+a new file called <code>practical2.sh</code> inside the
+<code>practical2</code> directory. If you are using a different text
+editor, please adapt the previous command accordingly. Once the text
+editor application is running, write the following two lines:</p>
 <pre><code>## Script for practical 2
 </code></pre>
-<p>Save these contents into a file called <code>practical2.sh</code> located at the directory <code>practical2</code> that you created before. During the rest of this practical, write all the Unix commands that you type in the terminal also in the text file. Please don’t type them twice, first type them in the terminal window and once they work, then select the command-line using the mouse and finally copy and paste it into the text editor. Each time you copy a new line, save the file again. To keep a better record of what you are doing, add above each shell line a shell comment line, which always starts with one or more hash characters (<code>#</code>), for <strong>example</strong>:</p>
+<p>Save these contents using the <code>File -&gt; Save</code> menu
+option, or by pressing the <code>Ctrl+S</code> key combination (or
+<code>Cmd+S</code> in MacOS). Make sure you save the file inside the
+directory <code>practical2</code> that you created before and verify
+that the file is saved in that directory and has the contents you typed
+by using the Unix commands <code>ls</code> and <code>cat</code>.</p>
+<p>During the rest of this practical, write all the Unix commands that
+you type in the terminal also in this text file, commonly known as
+<em>shell script file</em>, <code>practical2.sh</code>. You don’t have
+to type the Unix commands twice. First type the Unix command in the
+terminal window and once the command works as expected, select the text
+of the command using the mouse, and copy and paste it into the text
+editor. Each time you copy a new line, save the file again. To keep a
+better record of what you are doing, add above each shell line a shell
+comment line, which always starts with one or more hash characters
+(<code>#</code>), for <strong>example</strong>:</p>
 <pre><code>## list the files
 ls</code></pre>
-<p>Once you have some Unix commands in your script file, and you have save it to disk, you may execute that script from the Unix shell as follows (assuming you saved the script as <code>practical2.sh</code>):</p>
+<p>Once you have some Unix commands in your script file, and you have
+saved it to disk, you may execute that script from the Unix shell as
+follows (assuming you saved the script as
+<code>practical2.sh</code>):</p>
 <pre><code>$ sh practical2.sh</code></pre>
-<p><strong>Tip:</strong> when writing shell scripts you will likely introduce syntax errors, which sometimes may be difficult to identify. To help you in identifying those errors you may use the website <a href="https://www.shellcheck.net">https://www.shellcheck.net</a>. To use it you should paste into the main text box the following line, known as <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a>:</p>
-<pre><code>#!/bin/sh</code></pre>
-<p>and afterwords paste the line, or lines, for which you want to check the syntax of your shell script. The website will parse your script and tell you that either issues were not detected or what syntax errors have been encountered.</p>
-<h1 id="chain-unix-commands-using-pipes">Chain Unix commands using pipes</h1>
-<p>In the previous practical we have seen how to redirect the terminal output to a file. In this section we are going to see a similar concept, where instead of redirecting the terminal output created by a Unix command to a file, we will redirect that terminal output as input into <strong>another Unix command</strong> by using what is known as a <a href="https://en.wikipedia.org/wiki/Pipeline_%28Unix%29">Unix pipeline</a>, or Unix pipe for short. The concept of Unix pipes was created by <a href="https://en.wikipedia.org/wiki/Douglas_McIlroy">Douglas McIlroy</a>, which is based on his widely adopted view of the <a href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix philosophy</a>:</p>
+<!--
+**Tip:** when writing shell scripts you will likely introduce syntax errors,
+which sometimes may be difficult to identify. To help you in identifying those
+errors you may use the website [https://www.shellcheck.net](https://www.shellcheck.net).
+To use it you should paste into the main text box the following line, known as
+[shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29):
+
+```
+#!/bin/sh
+```
+
+and afterwords paste the line, or lines, for which you want to check
+the syntax of your shell script. The website will parse your script
+and tell you that either issues were not detected or what syntax errors
+have been encountered.
+-->
+<h1 id="chain-unix-commands-using-pipes">Chain Unix commands using
+pipes</h1>
+<p>In the previous practical we have seen how to redirect the terminal
+output to a file. In this section we are going to see a similar concept,
+where instead of redirecting the terminal output created by a Unix
+command to a file, we will redirect that terminal output as input into
+<strong>another Unix command</strong> by using what is known as a <a
+href="https://en.wikipedia.org/wiki/Pipeline_%28Unix%29">Unix
+pipeline</a>, or Unix pipe for short. The concept of Unix pipes was
+created by <a
+href="https://en.wikipedia.org/wiki/Douglas_McIlroy">Douglas
+McIlroy</a>, which is based on his widely adopted view of the <a
+href="https://en.wikipedia.org/wiki/Unix_philosophy">Unix
+philosophy</a>:</p>
 <blockquote>
-<p>Write programs that do one thing and do it well. Write programs to work together. Write programs to handle text streams, because that is a universal interface.</p>
+<p>Write programs that do one thing and do it well. Write programs to
+work together. Write programs to handle text streams, because that is a
+universal interface.</p>
 </blockquote>
-<p>To use the Unix pipe we should place the vertical bar character (<code>|</code>) between the call to two commands. <strong>Tip:</strong> In keyboards with a Spanish layout, the bar character <code>|</code> can be written by pressing the keys <code>AltGr+1</code> in windows and Ubuntu, or <code>Alt+1</code> in MacOS.</p>
+<p>To use the Unix pipe we should place the vertical bar character
+(<code>|</code>) between the call to two commands. <strong>Tip:</strong>
+In keyboards with a Spanish layout, the bar character <code>|</code> can
+be written by pressing the keys <code>AltGr+1</code> in windows and
+Ubuntu, or <code>Alt+1</code> in MacOS.</p>
 <p>Try the following:</p>
 <pre><code>$ cat mostres_analitzades.csv | head</code></pre>
-<p>Notice that while the <code>cat</code> command should have sent the output of the <strong>whole</strong> text file to the terminal window, we only see the first few lines of that output. This has occurred because the pipe has sent that whole <strong>output</strong> from the <code>cat</code> command to the <strong>input</strong> of the <code>head</code> command, which only shows the first few lines of that input. This can be graphically represented as follows:</p>
+<p>Notice that while the <code>cat</code> command should have sent the
+output of the <strong>whole</strong> text file to the terminal window,
+we only see the first few lines of that output. This has occurred
+because the pipe has sent that whole <strong>output</strong> from the
+<code>cat</code> command to the <strong>input</strong> of the
+<code>head</code> command, which only shows the first few lines of that
+input. This can be graphically represented as follows:</p>
 <p><img src="singlepipe.png" style="display: block; margin-left: auto; margin-right: auto; width: 50%; height: auto;"></p>
 <h1 id="extract-rows-and-columns">Extract rows and columns</h1>
-<p>Text files such as CSV files have a matrix layout with rows corresponding to lines and columns to values separated by some delimiter character, which is a comma (<code>,</code>) in the case of the previous file <code>mostres_analitzades.csv</code>. Because of its matrix layout, a CSV file can be always opened by any spreadsheet software, such as Microsoft Excel; see image below.</p>
+<p>Text files such as CSV files have a matrix layout with rows
+corresponding to lines and columns to values separated by some delimiter
+character, which is a comma (<code>,</code>) in the case of the previous
+file <code>mostres_analitzades.csv</code>. Because of its matrix layout,
+a CSV file can be always opened by any spreadsheet software, such as
+Microsoft Excel; see image below.</p>
 <p><img src="ExcelCSV.png" style="display: block; margin-left: auto; margin-right: auto; width: 80%; height: auto;"></p>
-<p>However, there are at least two circumstances in which working with CSV files from the Unix command-line is preferable to do it from a spreadsheet software such as Microsoft Excel:</p>
+<p>However, there are at least two circumstances in which working with
+CSV files from the Unix command-line is preferable to do it from a
+spreadsheet software such as Microsoft Excel:</p>
 <ol type="1">
-<li>Spreadsheet software will always attempt to load the whole data into main memory. This may become prohibitive when having tens of thousands of rows, which is common for data with molecular-level measurements from high-thoughput instruments.</li>
-<li>Every spreadsheet software uses its own format to store the data, which makes it prone to <a href="https://en.wikipedia.org/wiki/Digital_obsolescence">digital obsolescence</a>, the fact that old software required to open a file is no longer available. CSV files, and text files in general, can never become obsolete because their format does not depend on any specific software to be read or written.</li>
+<li>Spreadsheet software will always attempt to load the whole data into
+main memory. This may become prohibitive when having tens of thousands
+of rows, which is common for data with molecular-level measurements from
+high-thoughput instruments.</li>
+<li>Every spreadsheet software uses its own format to store the data,
+which makes it prone to <a
+href="https://en.wikipedia.org/wiki/Digital_obsolescence">digital
+obsolescence</a>, the fact that old software required to open a file is
+no longer available. CSV files, and text files in general, can never
+become obsolete because their format does not depend on any specific
+software to be read or written.</li>
 </ol>
-<p>Additionally, the misuse of Microsoft Excel has caused multiple problems with important consequences in loss of monetary and human-time resources, such as the <a href="https://www.theguardian.com/politics/2020/oct/05/how-excel-may-have-caused-loss-of-16000-covid-tests-in-england">loss in 2020 of COVID19-test results in England</a> or the <a href="https://doi.org/10.1038/d41586-021-02211-4">misspelling of gene names stored in Excel files as supplementary information to scientific articles</a>.</p>
-<p>Here we will learn to do two common operations on data organized in a matrix layout: extract rows (lines) and extract columns (delimiter-separated values). To extract rows from a text file in Unix we will use the command <code>grep</code>, which requires two pieces of information:</p>
+<p>Additionally, the misuse of Microsoft Excel has caused multiple
+problems with important consequences in loss of monetary and human-time
+resources, such as the <a
+href="https://www.theguardian.com/politics/2020/oct/05/how-excel-may-have-caused-loss-of-16000-covid-tests-in-england">loss
+in 2020 of COVID19-test results in England</a> or the <a
+href="https://doi.org/10.1038/d41586-021-02211-4">misspelling of gene
+names stored in Excel files as supplementary information to scientific
+articles</a>.</p>
+<p>Here we will learn to do two common operations on data organized in a
+matrix layout: extract rows (lines) and extract columns
+(delimiter-separated values). To extract rows from a text file in Unix
+we will use the command <code>grep</code>, which requires two pieces of
+information:</p>
 <pre><code>$ grep pattern filename</code></pre>
-<p>where <code>pattern</code> is the text that we expect to match to the lines we want to extract, while <code>filename</code> is the name of the file from which we want to extract the lines matching the pattern. Note that <code>pattern</code> can be something sophisticated such as a <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expression</a> (not covered in this practical) and <code>filename</code> can be ommitted when we want <code>grep</code> to read input from a pipe.</p>
-<p>For instance, the column <code>nom_regio</code> in the file <code>mostres_analitzades.csv</code> stores the name of the Catalan area to which the data in the row corresponds to. Let’s say we want to extract the rows for the data derived from the area of Barcelona into a separate file called <code>mostres_analitzades_bcn.csv</code>.</p>
+<p>where <code>pattern</code> is the text that we expect to match to the
+lines we want to extract, while <code>filename</code> is the name of the
+file from which we want to extract the lines matching the pattern. Note
+that <code>pattern</code> can be something sophisticated such as a <a
+href="https://en.wikipedia.org/wiki/Regular_expression">regular
+expression</a> (not covered in this practical) and <code>filename</code>
+can be ommitted when we want <code>grep</code> to read input from a
+pipe.</p>
+<p>For instance, the column <code>nom_regio</code> in the file
+<code>mostres_analitzades.csv</code> stores the name of the Catalan area
+to which the data in the row corresponds to. Let’s say we want to
+extract the rows for the data derived from the area of Barcelona into a
+separate file called <code>mostres_analitzades_bcn.csv</code>.</p>
 <pre><code>$ grep Barcelona mostres_analitzades.csv &gt; mostres_analitzades_bcn.csv</code></pre>
-<p>Now, repeat the command but this time extracting the rows corresponding to the data derived from the area of Lleida into another file called <code>mostres_analitzades_lleida.csv</code>.</p>
-<p><strong>Note:</strong> note that <code>grep</code> has worked well for this particular task because any other column in the data that was using the terms <code>Barcelona</code> or <code>Lleida</code>, had those terms also in the column <code>nom_regio</code>. The <code>grep</code> command <strong>doesn’t know about columns</strong>, it only finds matches of a pattern in lines, reporting the lines that match the pattern. You can also ask <code>grep</code> to report the lines that <strong>do not</strong> match the pattern by using the option <code>-v</code>.</p>
-<p>Try to extract rows from the file <code>mostres_analitzades.csv</code> with data corresponding to women between 20 and 24 years of age into a new file called <code>mostres_analitzades_dones20a24.csv</code>. If you are unsure how to dump the output into a new file, please check <a href="https://funcompbio.github.io/practical1/#redirect-terminal-output-to-a-file">this section</a> from the previous practical. <strong>Tip:</strong> when the pattern consists of more than one word, or includes punctuation characters, you should enclose the pattern between two quote characters, e.g., <code>'something like this'</code>.</p>
-<p><strong>Warning:</strong> when using the terminal output redirection mechanism (<code>&gt;</code>) you should <strong>never use as output filename, the filename that is being used as input in the same command line</strong>, because that would lead to overwriting the input file and ending with a corrupted output or without output at all.</p>
-<p>Extracting columns can be done using the Unix command <code>cut</code>, which in the case of CSV files also requires specifying the options <code>-d</code> and <code>-f</code>:</p>
+<p>Now, repeat the command but this time extracting the rows
+corresponding to the data derived from the area of Lleida into another
+file called <code>mostres_analitzades_lleida.csv</code>.</p>
+<p><strong>Note:</strong> note that <code>grep</code> has worked well
+for this particular task because any other column in the data that was
+using the terms <code>Barcelona</code> or <code>Lleida</code>, had those
+terms also in the column <code>nom_regio</code>. The <code>grep</code>
+command <strong>doesn’t know about columns</strong>, it only finds
+matches of a pattern in lines, reporting the lines that match the
+pattern. You can also ask <code>grep</code> to report the lines that
+<strong>do not</strong> match the pattern by using the option
+<code>-v</code>.</p>
+<p>Try to extract rows from the file
+<code>mostres_analitzades.csv</code> with data corresponding to women
+between 20 and 24 years of age into a new file called
+<code>mostres_analitzades_dones20a24.csv</code>. If you are unsure how
+to dump the output into a new file, please check <a
+href="https://funcompbio.github.io/practical1/#redirect-terminal-output-to-a-file">this
+section</a> from the previous practical. <strong>Tip:</strong> when the
+pattern consists of more than one word, or includes punctuation
+characters, you should enclose the pattern between two quote characters,
+e.g., <code>'something like this'</code>.</p>
+<p><strong>Warning:</strong> when using the terminal output redirection
+mechanism (<code>&gt;</code>) you should <strong>never use as output
+filename, the filename that is being used as input in the same command
+line</strong>, because that would lead to overwriting the input file and
+ending with a corrupted output or without output at all.</p>
+<p>Extracting columns can be done using the Unix command
+<code>cut</code>, which in the case of CSV files also requires
+specifying the options <code>-d</code> and <code>-f</code>:</p>
 <pre><code>$ cut -d &#39;delimiter&#39; -f field filename</code></pre>
-<p>The option <code>-d</code> allows us to specify a <a href="https://en.wikipedia.org/wiki/Delimiter">delimiter character</a>, which by default is the <a href="https://en.wikipedia.org/wiki/Tab_key">TAB character</a> and should be always specified between single quotes (e.g., <code>','</code>). The option <code>-f</code> allows us to specify the columns, also known as <a href="https://en.wikipedia.org/wiki/Data_field">fields</a> in this context. For instance, let’s say we want to extract the column of the CSV file <code>mostres_analitzades.csv</code> corresponding to the number of positive cases at each week. First, we should identify which position has this column in the first line:</p>
+<p>The option <code>-d</code> allows us to specify a <a
+href="https://en.wikipedia.org/wiki/Delimiter">delimiter character</a>,
+which by default is the <a
+href="https://en.wikipedia.org/wiki/Tab_key">TAB character</a> and
+should be always specified between single quotes (e.g.,
+<code>','</code>). The option <code>-f</code> allows us to specify the
+columns, also known as <a
+href="https://en.wikipedia.org/wiki/Data_field">fields</a> in this
+context. For instance, let’s say we want to extract the column of the
+CSV file <code>mostres_analitzades.csv</code> corresponding to the
+number of positive cases at each week. First, we should identify which
+position has this column in the first line:</p>
 <pre><code>$ head -n1 mostres_analitzades.csv
 setmana_epidemiologica,any,data_inici,data_final,codi_regio,nom_regio,codi_ambit,nom_ambit,sexe,grup_edat,index_socioeconomic,total,positiu</code></pre>
-<p>where we have used the option <code>-n1</code> to force <code>head</code> to show only the first line of the file. Then, starting from 1, we should figure out that the column called <code>positiu</code> is number 13 and taking into account that this file uses the comma (<code>,</code>) as field separator, we should write the following command-line to extract that column:</p>
+<p>where we have used the option <code>-n1</code> to force
+<code>head</code> to show only the first line of the file. Then,
+starting from 1, we should figure out that the column called
+<code>positiu</code> is number 13 and taking into account that this file
+uses the comma (<code>,</code>) as field separator, we should write the
+following command-line to extract that column:</p>
 <pre><code>$ cut -d &#39;,&#39; -f 13 mostres_analitzades.csv | head</code></pre>
-<p>Now let’s say we want to extract this column from the Barcelona subset of the data. We could either run the previous command on the file we created before:</p>
+<p>Now let’s say we want to extract this column from the Barcelona
+subset of the data. We could either run the previous command on the file
+we created before:</p>
 <pre><code>$ cut -d &#39;,&#39; -f 13 mostres_analitzades_bcn.csv | head</code></pre>
-<p>or had we not generated that file, we could have done it from the original data file using two pipes, as follows:</p>
+<p>or had we not generated that file, we could have done it from the
+original data file using two pipes, as follows:</p>
 <pre><code>$ grep Barcelona mostres_analitzades.csv | cut -d &#39;,&#39; -f 13 | head</code></pre>
 <p>Note that in both cases the output is identical.</p>
 <h1 id="sort-rows">Sort rows</h1>
-<p>Unix provides a command called <code>sort</code> to order rows of a file in a number of ways. By default, it sorts rows in increasing alphabetical order. Note for instance that in the <code>mostres_analitzades.csv</code> file, the first column <code>setmana_epidemiologica</code> contains the week of the year in which the values for the corresponding row were obtained. However, if we directly sort the file with the default regime of <code>sort</code>, we will not see at the beginning of the data the first week of the year, nor the last week at the end. Try the following:</p>
+<p>Unix provides a command called <code>sort</code> to order rows of a
+file in a number of ways. By default, it sorts rows in increasing
+alphabetical order. Note for instance that in the
+<code>mostres_analitzades.csv</code> file, the first column
+<code>setmana_epidemiologica</code> contains the week of the year in
+which the values for the corresponding row were obtained. However, if we
+directly sort the file with the default regime of <code>sort</code>, we
+will not see at the beginning of the data the first week of the year,
+nor the last week at the end. Try the following:</p>
 <pre><code>sort mostres_analitzades.csv | head
 sort mostres_analitzades.csv | tail</code></pre>
-<p>Try now using the option <code>-n</code>, which forces <code>sort</code> to output the lines in numerical order instead of the alphabetical one and compare the result with the previous one:</p>
+<p>Try now using the option <code>-n</code>, which forces
+<code>sort</code> to output the lines in numerical order instead of the
+alphabetical one and compare the result with the previous one:</p>
 <pre><code>sort -n mostres_analitzades.csv | head
 sort -n mostres_analitzades.csv | tail</code></pre>
-<p><strong>Note:</strong> an important feature of the <code>sort</code> command, and of most of the Unix commands, is that it leaves the input file <strong>intact</strong>. The <code>sort</code> command merely shows us the <em>ordered version</em> of the input file on the screen. It <strong>does not alter the input file</strong>.</p>
-<p><strong>Exercise:</strong> generate an alphabetically increasing ordered version of the file <code>mostres_analitzades.csv</code> and store it under the file name <code>mostres_analitzades_ordenat.csv</code>.</p>
-<h1 id="remove-consecutive-duplicated-lines">Remove consecutive duplicated lines</h1>
-<p>The Unix command <code>uniq</code> <strong>removes consecutive duplicated lines</strong>. This command is mostly useful in combination with the previous two commands that can be used to extract a column and sort it alphabetically, because that operation will allow us to output identical values together. Let’s see this working with the following example on the file <code>mostres_analitzades.csv</code>, try to understand what is each command line doing:</p>
+<p><strong>Note:</strong> an important feature of the <code>sort</code>
+command, and of most of the Unix commands, is that it leaves the input
+file <strong>intact</strong>. The <code>sort</code> command merely shows
+us the <em>ordered version</em> of the input file on the screen. It
+<strong>does not alter the input file</strong>.</p>
+<p><strong>Exercise:</strong> generate an alphabetically increasing
+ordered version of the file <code>mostres_analitzades.csv</code> and
+store it under the file name
+<code>mostres_analitzades_ordenat.csv</code>.</p>
+<h1 id="remove-consecutive-duplicated-lines">Remove consecutive
+duplicated lines</h1>
+<p>The Unix command <code>uniq</code> <strong>removes consecutive
+duplicated lines</strong>. This command is mostly useful in combination
+with the previous two commands that can be used to extract a column and
+sort it alphabetically, because that operation will allow us to output
+identical values together. Let’s see this working with the following
+example on the file <code>mostres_analitzades.csv</code>, try to
+understand what is each command line doing:</p>
 <pre><code>$ cut -d &#39;,&#39; -f 6 mostres_analitzades.csv | head
 nom_regio
 Camp de Tarragona
@@ -117,8 +336,19 @@ No disponible
 nom_regio
 Penedès
 Terres de l&#39;Ebre</code></pre>
-<h1 id="count-consecutive-occurrences">Count consecutive occurrences</h1>
-<p>In the previous practical, we have seen the command <code>wc</code>, which can be employed to count the lines of a text file. Here we will see that the command <code>uniq</code> with its option <code>-c</code>, can be used to count <strong>consecutively repeated</strong> lines. This is useful to count occurrences of interest in a file. For instance, let’s say we want to count the number of different occurrences of positive cases in the file <code>mostres_analitzades.csv</code>, i.e., how many lines (weeks) reported 0 positive cases, how many reported 1, how many reported 2, etc. We need to extract the positive column (13), sort it and apply the <code>uniq -c</code> command (results below from data downloaded on September 27th, 2024):</p>
+<h1 id="count-consecutive-occurrences">Count consecutive
+occurrences</h1>
+<p>In the previous practical, we have seen the command <code>wc</code>,
+which can be employed to count the lines of a text file. Here we will
+see that the command <code>uniq</code> with its option <code>-c</code>,
+can be used to count <strong>consecutively repeated</strong> lines. This
+is useful to count occurrences of interest in a file. For instance,
+let’s say we want to count the number of different occurrences of
+positive cases in the file <code>mostres_analitzades.csv</code>, i.e.,
+how many lines (weeks) reported 0 positive cases, how many reported 1,
+how many reported 2, etc. We need to extract the positive column (13),
+sort it and apply the <code>uniq -c</code> command (results below from
+data downloaded on September 27th, 2024):</p>
 <pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c
    6942 0
   13452 1
@@ -132,7 +362,10 @@ Terres de l&#39;Ebre</code></pre>
       8 7
       5 8
       1 positiu</code></pre>
-<p>Let’s say we want to see the most frequent occurrences first. We would need then to sort the previous output numerically (option <code>-n</code>) and from largest to smallest (option <code>-r</code>), as follows:</p>
+<p>Let’s say we want to see the most frequent occurrences first. We
+would need then to sort the previous output numerically (option
+<code>-n</code>) and from largest to smallest (option <code>-r</code>),
+as follows:</p>
 <pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c | sort -n -r
   13452 1
    6942 0
@@ -146,7 +379,13 @@ Terres de l&#39;Ebre</code></pre>
       1 positiu
       1 12
       1 10</code></pre>
-<p>So the most frequent reported positive figure was 1 in 13452 weeks (lines in the CSV file), the second most frequent one was 0 positives in 6942 lines, and so on. We can also tell <code>sort</code> to order that output by the second column using the option <code>-k</code>, where we should specify the range of columns (separated by a comma ‘,’) we want to use for ordering), which would give us the whole ordered frequency distribution of positives:</p>
+<p>So the most frequent reported positive figure was 1 in 13452 weeks
+(lines in the CSV file), the second most frequent one was 0 positives in
+6942 lines, and so on. We can also tell <code>sort</code> to order that
+output by the second column using the option <code>-k</code>, where we
+should specify the range of columns (separated by a comma ‘,’) we want
+to use for ordering), which would give us the whole ordered frequency
+distribution of positives:</p>
 <pre><code>$ cut -f 13 -d &#39;,&#39; mostres_analitzades.csv | sort | uniq -c | sort -n -k 2,2
       1 positiu
    6942 0
@@ -161,7 +400,11 @@ Terres de l&#39;Ebre</code></pre>
       1 10
       1 12</code></pre>
 <h1 id="paste-columns">Paste columns</h1>
-<p>The Unix command <code>paste</code> allows us to paste in parallel lines of given files using a <code>TAB</code> as delimiter character by default, which can be changed with the option <code>-d</code>. For instance, see what happens when extract two columns from the CSV file and paste them again:</p>
+<p>The Unix command <code>paste</code> allows us to paste in parallel
+lines of given files using a <code>TAB</code> as delimiter character by
+default, which can be changed with the option <code>-d</code>. For
+instance, see what happens when extract two columns from the CSV file
+and paste them again:</p>
 <pre><code>$ cut -d &#39;,&#39; -f 1 mostres_analitzades.csv &gt; mostres_analitzades_setmana.csv
 $ cut -d &#39;,&#39; -f 13 mostres_analitzades.csv &gt; mostres_analitzades_positiu.csv
 $ paste mostres_analitzades_setmana.csv mostres_analitzades_positiu.csv | head
@@ -176,26 +419,48 @@ setmana_epidemiologica  positiu
 4   0
 35  1</code></pre>
 <h1 id="exercises">Exercises</h1>
-<p>Using the Unix commands we have learned in this practical, try to answer the questions below about the downloaded SIVIC data. Try to edit a shell script for each question under the filename, for instance, <code>question1.sh</code>, <code>question2.sh</code>, etc., and execute it from the shell as, for instance:</p>
+<p>Using the Unix commands we have learned in this practical, try to
+answer the questions below about the downloaded SIVIC data. Try to edit
+a shell script for each question under the filename, for instance,
+<code>question1.sh</code>, <code>question2.sh</code>, etc., and execute
+it from the shell as, for instance:</p>
 <pre><code>$ sh question1.sh</code></pre>
 <h3 id="question-1">Question 1</h3>
-<p>One of the previous commands revealed a value called <code>No disponible</code>, which suggests that some of the weeks in the two SIVIC data files, may contain the so-called <a href="https://en.wikipedia.org/wiki/Missing_data">missing values</a>. Calculate how many weeks do we have in each of the two SIVIC data files, <code>mostres_analitzades.csv</code> and <code>virus_detectats.csv</code>, excluding those with missing values. (answer: 23793 for <code>mostres_analitzades.csv</code> and 21394 for <code>virus_detectats.csv</code>, for the data downloaded on September 27th, 2024)</p>
+<p>One of the previous commands revealed a value called
+<code>No disponible</code>, which suggests that some of the weeks in the
+two SIVIC data files, may contain the so-called <a
+href="https://en.wikipedia.org/wiki/Missing_data">missing values</a>.
+Calculate how many weeks do we have in each of the two SIVIC data files,
+<code>mostres_analitzades.csv</code> and
+<code>virus_detectats.csv</code>, excluding those with missing values.
+(answer: 23793 for <code>mostres_analitzades.csv</code> and 21394 for
+<code>virus_detectats.csv</code>, for the data downloaded on September
+27th, 2024)</p>
 <!--
 $ grep -v 'No disponible' mostres_analitzades.csv | wc -l
 $ grep -v 'No disponible' virus_detectats.csv | wc -l
 -->
 <h3 id="question-2">Question 2</h3>
-<p>Which was the highest number of positives in the file <code>mostres_analitzades.csv</code> in the data from the last week of 2022? (answer: 5 for the data downloaded on September 27th, 2024)</p>
+<p>Which was the highest number of positives in the file
+<code>mostres_analitzades.csv</code> in the data from the last week of
+2022? (answer: 5 for the data downloaded on September 27th, 2024)</p>
 <!--
 $ grep '52,2022' mostres_analitzades.csv | cut -d ',' -f 13 | sort -nr | head
 -->
 <h3 id="question-3">Question 3</h3>
-<p>Using the file <code>virus_detectats.csv</code>, figure out how many different viruses are being tested by the SIVIC system. (answer: 10 for the data downloaded on September 27th, 2024)</p>
+<p>Using the file <code>virus_detectats.csv</code>, figure out how many
+different viruses are being tested by the SIVIC system. (answer: 10 for
+the data downloaded on September 27th, 2024)</p>
 <!--
 $ cut -d ',' -f 9 virus_detectats.csv | sort | uniq | wc -l
 -->
 <h3 id="question-4">Question 4</h3>
-<p>Using the file <code>mostres_analitzades.csv</code>, build a ranking of the data by the number of positives cases, from highest to lowest, found in the area of Lleida in 2022, among men between 40 and 44 years of age, showing only the week number, initial and end date, and number of positives. For the data downloaded on September 27th, 2024, the top of the ranking should look like this:</p>
+<p>Using the file <code>mostres_analitzades.csv</code>, build a ranking
+of the data by the number of positives cases, from highest to lowest,
+found in the area of Lleida in 2022, among men between 40 and 44 years
+of age, showing only the week number, initial and end date, and number
+of positives. For the data downloaded on September 27th, 2024, the top
+of the ranking should look like this:</p>
 <pre><code>46,14/11/2022,20/11/2022,5
 47,21/11/2022,27/11/2022,2
 40,03/10/2022,09/10/2022,2
@@ -210,7 +475,11 @@ $ cut -d ',' -f 9 virus_detectats.csv | sort | uniq | wc -l
 $ grep Lleida mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13,13 -nr | cut -d ',' -f 1,3,4,13 | head
 -->
 <h3 id="question-5">Question 5</h3>
-<p>Generate the ranking from the previous question replacing the area of Lleida by the area of Girona and compare the top of those two rankings, side by side. For the data downloaded on September 27th, 2024, the top of that comparison should look as follows, with the data from Lleida on the left and from Girona on the right:</p>
+<p>Generate the ranking from the previous question replacing the area of
+Lleida by the area of Girona and compare the top of those two rankings,
+side by side. For the data downloaded on September 27th, 2024, the top
+of that comparison should look as follows, with the data from Lleida on
+the left and from Girona on the right:</p>
 <pre><code>46,14/11/2022,20/11/2022,5  22,30/05/2022,05/06/2022,3
 47,21/11/2022,27/11/2022,2  50,12/12/2022,18/12/2022,2
 40,03/10/2022,09/10/2022,2  42,17/10/2022,23/10/2022,2
@@ -225,7 +494,9 @@ $ grep Lleida mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -
 $ grep Girona mostres_analitzades.csv | grep 2022 | grep 'Home,40 a 44' | sort -t ',' -k 13,13 -nr | cut -d ',' -f 1,3,4,13 > girona.txt
 $ paste lleida.txt girona.txt | head
 -->
-<p>We can observe that both areas had the larger occurrence of positives cases around the same weeks of the year, except for the 22nd week in Girona.</p>
+<p>We can observe that both areas had the larger occurrence of positives
+cases around the same weeks of the year, except for the 22nd week in
+Girona.</p>
 <h3 id="question-6">Question 6</h3>
 <p>Can you understand the following Unix command-line jokes?</p>
 <p><img style="float:left; margin-left:40px;" src="Unix_cat_joke.jpg" height=250/></p>
