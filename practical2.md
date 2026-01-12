@@ -27,14 +27,31 @@ If you are doing this practical in your own computer, please check the
 [setup](/setup/) webpage to make sure that you have access to some flavor of a
 Unix operating system and its CLI.
 
+<!--
 We will use the data files called `mostres_analitzades.csv` and
 `virus_detectats.csv` that were generated in the
 [first practical](/practical1/). If you don't have these files, please review
 that practical and generate them again. Once you have obtained those two files,
 copy them into a fresh new directory called `practical2`.
+-->
+Ideally, we would use the data files called `mostres_analitzades.csv` and
+`virus_detectats.csv` that were generated in the
+[first practical](/practical1/), or download them again from the
+[SIVIC](https://sivic.salut.gencat.cat/dades_obertes) portal. However, because
+those files currently store numerical values between quotes as if they were
+text strings, you should directly download them from the following links:
+
+  * [Vigilància_microbiològica_sentinella_a_Atenció_Primària__mostres_analitzades_20240927.csv](Vigilància_microbiològica_sentinella_a_Atenció_Primària__mostres_analitzades_20240927.csv)
+  * [Vigilància_microbiològica_sentinella_a_Atenció_Primària__virus_detectats_20240927.csv](Vigilància_microbiològica_sentinella_a_Atenció_Primària__virus_detectats_20240927.csv)
+
+The version of these files available at those links were downloaded from the
+Catalan SIVIC system on September 27th, 2024. Once you have downloaded those two
+files, copy them into a fresh new directory called `practical2`, and rename them
+to `mostres_analitzades.csv` and `virus_detectats.csv`, respectively.
 
 # Use a text editor to write your Unix scripts.
 
+<!--
 If you have not done so yet, please download an install a text editor application
 in your computer, following the [setup](/setup#text-editor/) instructions. Once
 the text editor application is installed, run it as follows:
@@ -47,31 +64,50 @@ the text editor application is installed, run it as follows:
 
   * If you have installed a _modern_ text editor, open it by starting the
     application from the graphical user interface of your computer.
+-->
+Unix commands can be combined into scripts, which are text files containing a
+sequence of commands that can be executed one after the other. To create such
+scripts, you need to use a text editor application. There are different types of
+text editors, some of them listed at the [setup](/setup#text-editor/) webpage.
+Here we recommend you using the [Visual Studio Code](https://code.visualstudio.com)
+text editor. Once this editor is available in you computer, you have created
+the directory `practical2`, and you have changed your CWD to `practical2`,
+run the text editor as follows:
 
-Once the text editor application is running, write the following two lines on a new
-fresh empty text file:
+```
+$ code practical2/practical2.sh
+```
+This command will open the Visual Studio Code application and create a new file
+called `practical2.sh` inside the `practical2` directory. If you are using a
+different text editor, please adapt the previous command accordingly. Once the
+text editor application is running, write the following two lines:
 
 ```
 ## Script for practical 2
 
 ```
 
-Save these contents into a file called `practical2.sh` located at the directory
-`practical2` that you created before. During the rest of this practical, write
-all the Unix commands that you type in the terminal also in the text file.
-Please don't type them twice, first type them in the terminal window and once
-they work, then select the command-line using the mouse and finally copy and
-paste it into the text editor. Each time you copy a new line, save the file
-again. To keep a better record of what you are doing, add above each shell line
-a shell comment line, which always starts with one or more hash characters
-(`#`), for **example**:
+Save these contents using the `File -> Save` menu option, or by pressing the
+`Ctrl+S` key combination (or `Cmd+S` in MacOS). Make sure you save the file inside
+the directory `practical2` that you created before and verify that the file is
+saved in that directory and has the contents you typed by using the Unix commands
+`ls` and `cat`.
+
+During the rest of this practical, write all the Unix commands that you type in
+the terminal also in this text file, commonly known as *shell script file*,
+`practical2.sh`. You don't have to type the Unix commands twice. First type the
+Unix command in the terminal window and once the command works as expected, select
+the text of the command using the mouse, and copy and paste it into the text
+editor. Each time you copy a new line, save the file again. To keep a better
+record of what you are doing, add above each shell line a shell comment line,
+which always starts with one or more hash characters (`#`), for **example**:
 
 ```
 ## list the files
 ls
 ```
 
-Once you have some Unix commands in your script file, and you have save it to
+Once you have some Unix commands in your script file, and you have saved it to
 disk, you may execute that script from the Unix shell as follows (assuming you
 saved the script as `practical2.sh`):
 
@@ -79,6 +115,7 @@ saved the script as `practical2.sh`):
 $ sh practical2.sh
 ```
 
+<!--
 **Tip:** when writing shell scripts you will likely introduce syntax errors,
 which sometimes may be difficult to identify. To help you in identifying those
 errors you may use the website [https://www.shellcheck.net](https://www.shellcheck.net).
@@ -93,6 +130,7 @@ and afterwords paste the line, or lines, for which you want to check
 the syntax of your shell script. The website will parse your script
 and tell you that either issues were not detected or what syntax errors
 have been encountered.
+-->
 
 # Chain Unix commands using pipes
 
