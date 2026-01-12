@@ -65,22 +65,26 @@ the text editor application is installed, run it as follows:
   * If you have installed a _modern_ text editor, open it by starting the
     application from the graphical user interface of your computer.
 -->
-Unix commands can be combined into scripts, which are text files containing a
-sequence of commands that can be executed one after the other. To create such
-scripts, you need to use a text editor application. There are different types of
-text editors, some of them listed at the [setup](/setup#text-editor/) webpage.
-Here we recommend you using the [Visual Studio Code](https://code.visualstudio.com)
-text editor. Once this editor is available in you computer, you have created
-the directory `practical2`, and you have changed your CWD to `practical2`,
-run the text editor as follows:
+Unix commands can be combined into what is commonly known as
+[shell scripts](https://en.wikipedia.org/wiki/Shell_script), which are
+[text files](https://en.wikipedia.org/wiki/Text_file) containing a sequence of
+Unix commands that can be executed one after the other. To create such shell
+scripts, you need to use a text editor application. There are different types
+of text editors, some of them listed at the [setup](/setup#text-editor/)
+webpage. Here we recommend you using the
+[Visual Studio Code](https://code.visualstudio.com) text editor. Once this
+text editor application is available in you computer, change your
+[current working directory (CWD)](https://en.wikipedia.org/wiki/Working_directory)
+to the previously created `practical2`, and run the text editor as follows:
 
 ```
-$ code practical2/practical2.sh
+$ code practical2.sh
 ```
 This command will open the Visual Studio Code application and create a new file
-called `practical2.sh` inside the `practical2` directory. If you are using a
-different text editor, please adapt the previous command accordingly. Once the
-text editor application is running, write the following two lines:
+called `practical2.sh` inside the `practical2` directory (if you really changed
+your CWD to this directory). If you are using a different text editor, please
+adapt the previous command accordingly. Once the text editor application is
+running, write the following two lines:
 
 ```
 ## Script for practical 2
